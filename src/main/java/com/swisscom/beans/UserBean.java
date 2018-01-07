@@ -6,7 +6,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -23,6 +22,8 @@ public class UserBean {
     private String username;
     private String password;
     private boolean anonymous = true;
+    private static final String STARTPAGESUCCESSFULLOGIN = "brokers?faces-redirect=true";
+    private static final String STARTPAGESUCCESSFULLOGOUT = "/";
 
     public String getUsername() {
         return username;
@@ -59,7 +60,7 @@ public class UserBean {
         } finally {
             session.close();
         }
-        return user.getId();
+        return STARTPAGESUCCESSFULLOGIN;
     }
 
     public String login() {
@@ -76,7 +77,7 @@ public class UserBean {
             transaction.commit();
             if (password.equals(user.getPassword())) {
                 this.anonymous = false;
-                return "output";
+                return STARTPAGESUCCESSFULLOGIN;
             } else {
                 return "invalid";
             }
@@ -95,11 +96,15 @@ public class UserBean {
             this.anonymous = true;
             FacesContext context = FacesContext.getCurrentInstance();
             ExternalContext ec = context.getExternalContext();
-            ec.redirect("index.xhtml");
+            ec.redirect(STARTPAGESUCCESSFULLOGOUT);
             final HttpServletRequest request = (HttpServletRequest) ec.getRequest();
             request.getSession(false).invalidate();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isLoggedIn() {
+        return !this.anonymous;
     }
 }

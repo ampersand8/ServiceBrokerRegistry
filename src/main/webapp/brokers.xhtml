@@ -1,0 +1,11 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                template="WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h:panelGroup layout="block">
+            <h2>Here's a list of registered service brokers</h2>
+            <h:button value="Register New" outcome="secured/registerBroker"/>
+            In this registry you should find all the registries.
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
