@@ -2,14 +2,16 @@ package com.swisscom.beans;
 
 import com.swisscom.model.User;
 import com.swisscom.util.HibernateUtil;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -23,6 +25,8 @@ public class UserBean {
     private String password;
     private boolean anonymous = true;
     private static final String STARTPAGESUCCESSFULLOGIN = "brokers?faces-redirect=true";
+    private static final String PAGEFAILEDREGISTER= "/?failed=register";
+    private static final String PAGEFAILEDLOGIN = "/?failed=login";
     private static final String STARTPAGESUCCESSFULLOGOUT = "/";
 
     public String getUsername() {
@@ -54,9 +58,9 @@ public class UserBean {
             session.save(user);
             transaction.commit();
             this.anonymous = false;
-        } catch (HibernateException e) {
-            transaction.rollback();
-            e.printStackTrace();
+        } catch (PersistenceException e) {
+            if (transaction != null) transaction.rollback();
+            return PAGEFAILEDREGISTER;
         } finally {
             session.close();
         }
@@ -79,16 +83,13 @@ public class UserBean {
                 this.anonymous = false;
                 return STARTPAGESUCCESSFULLOGIN;
             } else {
-                return "invalid";
+                return PAGEFAILEDLOGIN;
             }
-
-        } catch (HibernateException e) {
-            transaction.rollback();
-            e.printStackTrace();
+        } catch (NoResultException e) {
+            return PAGEFAILEDLOGIN;
         } finally {
             session.close();
         }
-        return "invalid";
     }
 
     public void logout() {
