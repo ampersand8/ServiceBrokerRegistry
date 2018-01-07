@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.swisscom.model.User" table="users">
+        <meta attribute="class-description">
+            This class contains the course details.
+        </meta>
+        <id name="id" type="string" column="id"/>
+        <property name="username" type="string" column="username" not-null="true" unique="true" />
+        <property name="password" type="string" column="password" not-null="true" />
+    </class>
+
+</hibernate-mapping>

@@ -1,0 +1,14 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:panelGroup layout="block" pt:class="topnavigation">
+        <div id="menu" class="left">
+            MyNavigation
+        </div>
+        <div class="right">
+            <ui:include src="login.xhtml"/>
+        </div>
+    </h:panelGroup>
+</ui:composition>
