@@ -9,8 +9,20 @@
             This class contains the course details.
         </meta>
         <id name="id" type="string" column="id"/>
-        <property name="username" type="string" column="username" not-null="true" unique="true" />
-        <property name="password" type="string" column="password" not-null="true" />
+        <property name="username" type="string" column="username" not-null="true" unique="true"/>
+        <property name="password" type="string" column="password" not-null="true"/>
+    </class>
+
+    <class name="com.swisscom.model.Broker" table="brokers">
+        <meta attribute="class-description">
+            This class contains the course details.
+        </meta>
+        <id name="id" type="string" column="id"/>
+        <property name="owner" type="string" column="owner" not-null="true"/>
+        <property name="name" type="string" column="name" not-null="true" unique="true"/>
+        <property name="url" type="string" column="url" not-null="true"/>
+        <property name="username" type="string" column="username" not-null="true"/>
+        <property name="password" type="string" column="password" not-null="true"/>
     </class>
 
 </hibernate-mapping>

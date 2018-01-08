@@ -17,10 +17,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.Serializable;
 
 @ManagedBean(name = "userBean")
 @SessionScoped
-public class UserBean {
+public class UserBean implements Serializable {
+    private String id;
     private String username;
     private String password;
     private boolean anonymous = true;
@@ -28,6 +30,14 @@ public class UserBean {
     private static final String PAGEFAILEDREGISTER= "/?failed=register";
     private static final String PAGEFAILEDLOGIN = "/?failed=login";
     private static final String STARTPAGESUCCESSFULLOGOUT = "/";
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -64,6 +74,7 @@ public class UserBean {
         } finally {
             session.close();
         }
+        this.id = user.getId();
         return STARTPAGESUCCESSFULLOGIN;
     }
 
@@ -81,6 +92,7 @@ public class UserBean {
             transaction.commit();
             if (password.equals(user.getPassword())) {
                 this.anonymous = false;
+                this.id = user.getId();
                 return STARTPAGESUCCESSFULLOGIN;
             } else {
                 return PAGEFAILEDLOGIN;

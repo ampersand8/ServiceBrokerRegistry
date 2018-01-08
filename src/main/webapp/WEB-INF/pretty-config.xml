@@ -13,4 +13,9 @@
         <view-id value="/brokers.xhtml" />
     </url-mapping>
 
+    <url-mapping id="registerBroker">
+        <pattern value="/brokers/register" />
+        <view-id value="/registerBroker.xhtml" />
+    </url-mapping>
+
 </pretty-config>
