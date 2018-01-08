@@ -4,12 +4,19 @@ import com.swisscom.model.Broker;
 import com.swisscom.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @ManagedBean(name = "brokerBean")
 @SessionScoped
@@ -87,5 +94,25 @@ public class BrokerBean implements Serializable {
             session.close();
         }
         return PAGESUCCESSREGISTER;
+    }
+
+    public List<Broker> getList() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Broker> query = builder.createQuery(Broker.class);
+            Root<Broker> root = query.from(Broker.class);
+            query.select(root);
+            Query<Broker> q = session.createQuery(query);
+            List<Broker> brokers = q.getResultList();
+            transaction.commit();
+            return brokers;
+        } catch (NoResultException e) {
+            return new ArrayList<Broker>();
+        } finally {
+            session.close();
+        }
     }
 }
