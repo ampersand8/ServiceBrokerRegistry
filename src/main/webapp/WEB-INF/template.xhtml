@@ -13,10 +13,11 @@
 </h:head>
 <body>
 <ui:insert name="topnavigation"/>
-<h1>Open Service Broker</h1>
-<f:view>
-    <ui:insert name="content"/>
-</f:view>
 
+<h:panelGroup layout="block" styleClass="contentContainer">
+    <f:view>
+        <ui:insert name="content"/>
+    </f:view>
+</h:panelGroup>
 </body>
 </html>

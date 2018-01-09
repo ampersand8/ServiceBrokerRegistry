@@ -21,7 +21,7 @@ import java.util.List;
 public class ServiceBean implements Serializable {
     public List<Service> getList() {
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
 
         try {
@@ -37,7 +37,7 @@ public class ServiceBean implements Serializable {
         } catch (NoResultException e) {
             return new ArrayList<>();
         } finally {
-            session.close();
+            // session.close();
         }
     }
 }

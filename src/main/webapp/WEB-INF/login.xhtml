@@ -11,8 +11,8 @@
                 <h:inputSecret id="password" required="true"
                                value="#{userBean.password}" pt:placeholder="Password">
                 </h:inputSecret>
-                <h:commandButton value="Login" action="#{userBean.login}"/>
-                <h:commandButton value="Register" action="#{userBean.add}"/>
+                <h:commandButton value="Login" action="#{userBean.login}" styleClass="action"/>
+                <h:commandButton value="Register" action="#{userBean.add}" styleClass="action"/>
             </h:form>
         </h:panelGroup>
     </c:if>
@@ -20,7 +20,10 @@
         <h:panelGroup layout="block" styleClass="loginregister">
             <h:form>
                 <h:outputLabel value="#{userBean.username}"/>
-                <h:commandButton value="Logout" action="#{userBean.logout}"/>
+                <h:commandLink action="#{userBean.logout}">
+                    <h:graphicImage name="images/log-out.svg" action="#{userBean.logout}"/>
+                </h:commandLink>
+
             </h:form>
         </h:panelGroup>
     </c:if>

@@ -3,9 +3,13 @@
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:h="http://java.sun.com/jsf/html">
 
+    <link href="../resources/style/topnavigation.css" rel="stylesheet" type="text/css"/>
     <h:panelGroup layout="block" pt:class="topnavigation">
         <div id="menu" class="left">
-            <h:link outcome="brokers" value="Brokers"/> | <h:link outcome="services" value="Services"/>
+            <ul class="menu">
+                <li id="brokersLink"><h:link outcome="brokers" value="Brokers"/></li>
+                <li id="servicesLink" ><h:link outcome="services" value="Services"/></li>
+            </ul>
         </div>
         <div class="right">
             <ui:include src="login.xhtml"/>

@@ -60,7 +60,7 @@ public class UserBean implements Serializable {
     }
 
     public String add() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
         User user = new User(username, password);
         try {
@@ -72,14 +72,14 @@ public class UserBean implements Serializable {
             if (transaction != null) transaction.rollback();
             return PAGEFAILEDREGISTER;
         } finally {
-            session.close();
+            // session.close();
         }
         this.id = user.getId();
         return STARTPAGESUCCESSFULLOGIN;
     }
 
     public String login() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -100,7 +100,7 @@ public class UserBean implements Serializable {
         } catch (NoResultException e) {
             return PAGEFAILEDLOGIN;
         } finally {
-            session.close();
+            // session.close();
         }
     }
 

@@ -95,7 +95,7 @@ public class BrokerBean implements Serializable {
 
 
     public String add() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
         Broker broker = new Broker(userBean.getId(), name, url, username, password);
         List<Service> services = testReadingJson(getCatalog(broker));
@@ -117,7 +117,7 @@ public class BrokerBean implements Serializable {
                 e.printStackTrace();
                 return PAGEFAILEDREGISTER;
             } finally {
-                session.close();
+                // session.close();
             }
             return PAGESUCCESSREGISTER;
         } else {
@@ -127,7 +127,7 @@ public class BrokerBean implements Serializable {
 
     public List<Broker> getList() {
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
 
         try {
@@ -143,7 +143,7 @@ public class BrokerBean implements Serializable {
         } catch (NoResultException e) {
             return new ArrayList<>();
         } finally {
-            session.close();
+            // session.close();
         }
     }
 

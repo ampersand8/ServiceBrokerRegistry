@@ -1,0 +1,73 @@
+div.topnavigation {
+    display: block;
+    background-color: #fafafa;
+    width: 100%;
+    top: 0;
+    margin-top: 0;
+    padding: 0;
+    height: 3.5em;
+    border-bottom: 1px solid #ddd;
+}
+
+div.topnavigation div {
+    display: inline-block;
+    margin-bottom: -10px;
+    vertical-align: top;
+    height: 3.5em;
+}
+
+div#menu {
+    margin-bottom: -4px;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+
+ul.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    height: 3.5em;
+}
+
+ul.menu li {
+    float: left;
+    height: 3.5em;
+}
+
+ul.menu li a {
+    display: block;
+    color: #555;
+    text-align: center;
+    padding: 0.8em 1em 0.8em;
+    text-decoration: none;
+    font-size: 19px;
+}
+
+ul.menu li:hover {
+    background-color: #f4f4f9 !important;
+}
+
+ul.menu li.active {
+    /* background-color: #4CAF50; */
+    /* border-bottom: 2px solid #278eff; */
+}
+
+ul.menu li.active a {
+    color: #278eff;
+}
+
+div.loginregister input {
+    padding: 1em;
+    border: none;
+    background-color: #dddddd;
+    margin: 0.5em;
+}
+
+div.loginregister .action:hover {
+    cursor: pointer;
+    background-color: #278eff;
+    color: white;
+}
