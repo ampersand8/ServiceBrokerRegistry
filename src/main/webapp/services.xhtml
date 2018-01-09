@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h:panelGroup layout="block">
+            <h2>Here's a list of services</h2>
+            In this registry you should find all the services.
+            <h:dataTable value="#{serviceBean.list}" var="s">
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    #{s.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Description</f:facet>
+                    #{s.description}
+                </h:column>
+            </h:dataTable>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
