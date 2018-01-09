@@ -1,5 +1,9 @@
 package com.swisscom.model;
 
+import com.swisscom.model.dto.PlanDto;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Plan {
@@ -10,14 +14,34 @@ public class Plan {
     private String description;
     private boolean free;
     private boolean bindable;
-    private String[] tags;
-    private String[] requires;
+    private List<Tag> tags;
+    private List<Require> requires;
 
     public Plan() {
 
     }
 
-    public Plan(String service, String planId, String name, String description, boolean free, boolean bindable, String[] tags, String[] requires) {
+    public static Plan makePlanFromDto(PlanDto dto) {
+        return makePlan(dto.getService(), dto.getId(), dto.getName(), dto.getDescription(), dto.isFree(), dto.isBindable(), dto.getTags(), dto.getRequires());
+    }
+
+    public static Plan makePlan(String service, String planId, String name, String description, boolean free, boolean bindable, String[] tags, String[] requires) {
+        List<Tag> tagList = new ArrayList<>();
+        if (tags != null) {
+            for (String tag : tags) {
+                tagList.add(new Tag(tag));
+            }
+        }
+        List<Require> requireList = new ArrayList<>();
+        if (requires != null) {
+            for (String require : requires) {
+                requireList.add(new Require(require));
+            }
+        }
+        return new Plan(service, planId, name, description, free, bindable, tagList, requireList);
+    }
+
+    public Plan(String service, String planId, String name, String description, boolean free, boolean bindable, List<Tag> tags, List<Require> requires) {
         this.id = UUID.randomUUID().toString();
         this.service = service;
         this.planId = planId;
@@ -85,19 +109,19 @@ public class Plan {
         this.bindable = bindable;
     }
 
-    public String[] getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(String[] tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 
-    public String[] getRequires() {
+    public List<Require> getRequires() {
         return requires;
     }
 
-    public void setRequires(String[] requires) {
+    public void setRequires(List<Require> requires) {
         this.requires = requires;
     }
 }

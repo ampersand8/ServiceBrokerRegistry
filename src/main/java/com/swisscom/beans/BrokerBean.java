@@ -1,6 +1,9 @@
 package com.swisscom.beans;
 
+import com.google.gson.Gson;
 import com.swisscom.model.Broker;
+import com.swisscom.model.Service;
+import com.swisscom.model.dto.ServiceDto;
 import com.swisscom.util.HibernateUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -95,11 +98,18 @@ public class BrokerBean implements Serializable {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
         Broker broker = new Broker(userBean.getId(), name, url, username, password);
-        if (getCatalog(broker)) {
+        List<Service> services = testReadingJson(getCatalog(broker));
+        if (!services.isEmpty()) {
             //List<Service> services = getCatalog(broker);
             //logger.info(services);
             try {
                 transaction = session.beginTransaction();
+
+                for (Service service : services) {
+                    service.setBroker(broker.getId());
+                    session.save(service);
+                    broker.addService(service);
+                }
                 session.save(broker);
                 transaction.commit();
             } catch (PersistenceException e) {
@@ -116,7 +126,7 @@ public class BrokerBean implements Serializable {
     }
 
     public List<Broker> getList() {
-        testReadingJson();
+
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
 
@@ -137,23 +147,26 @@ public class BrokerBean implements Serializable {
         }
     }
 
-    private void testReadingJson() {
-        String testString = "{\"services\":[{\"id\":\"781e8f8c-c753-4a93-95eb-17c1f745b229\",\"name\":\"redisent\",\"description\":\"Redis Enterprise in-memory data structure store v3.2.3\",\"bindable\":true,\"plans\":[{\"id\":\"ea4b1b7d-3060-4ac6-836b-e134de0e7d9b\",\"name\":\"large\",\"description\":\"Redis Sentinel Cluster with 3 data bearing nodes with 8 GB memory, 8 GB storage and unlimited concurrent connections\",\"free\":false,\"metadata\":{\"displayName\":\"Large\",\"nodes\":\"3\",\"highAvailability\":true,\"dedicatedService\":true,\"maximumConcurrentConnections\":\"Unlimited\",\"storageCapacity\":\"8 GB\",\"memory\":\"8 GB\"},\"containerParams\":null},{\"id\":\"ebe11e59-5261-4939-ac8f-0a35c3850b4e\",\"name\":\"xlarge\",\"description\":\"Redis Sentinel Cluster with 3 data bearing nodes with 16 GB memory, 16 GB storage and unlimited concurrent connections\",\"free\":false,\"metadata\":{\"highAvailability\":true,\"displayName\":\"X-Large\",\"storageCapacity\":\"16 GB\",\"memory\":\"16 GB\",\"dedicatedService\":true,\"maximumConcurrentConnections\":\"Unlimited\",\"nodes\":\"3\"},\"containerParams\":null},{\"id\":\"7b71cf85-0e50-4509-af04-eafd3a6ad141\",\"name\":\"xxlarge\",\"description\":\"Redis Sentinel Cluster with 3 data bearing nodes with 32 GB memory, 32 GB storage, unlimited concurrent connections\",\"free\":false,\"metadata\":{\"highAvailability\":true,\"displayName\":\"XX-Large\",\"maximumConcurrentConnections\":\"Unlimited\",\"storageCapacity\":\"32 GB\",\"dedicatedService\":true,\"memory\":\"32 GB\",\"nodes\":\"3\"},\"containerParams\":null}],\"tags\":[\"redis\"],\"requires\":[],\"metadata\":{\"version\":\"3.2.3\",\"displayName\":\"Redis Enterprise\"},\"dashboard_client\":null}]}";
-        JSONObject obj = new JSONObject(testString);
-        JSONArray services = obj.getJSONArray("services");
-        for (int i = 0; i < services.length(); i++) {
-            JSONObject service = services.getJSONObject(i);
-            JSONArray plans = service.getJSONArray("plans");
-            for (int j = 0; j < plans.length(); j++) {
-                JSONObject plan = plans.getJSONObject(j);
-                System.out.println(plan.getString("id"));
-            }
-            System.out.println(service.getString("id"));
+    private List<Service> testReadingJson(String jsonString) {
+        JSONObject obj = new JSONObject(jsonString);
+        JSONArray jsonServices = obj.getJSONArray("services");
+        Gson gson = new Gson();
+        ArrayList<Service> services = new ArrayList<>();
+        for (int i = 0; i < jsonServices.length(); i++) {
+            JSONObject jsonService = jsonServices.getJSONObject(i);
+
+            ServiceDto serviceDto = gson.fromJson(jsonService.toString(), ServiceDto.class);
+            Service service = Service.makeServiceFromDto(serviceDto);
+            System.out.println(service.getName());
+            services.add(service);
         }
+        return services;
+
+
         // System.out.println(obj.getJSONArray("services"));
     }
 
-    private boolean getCatalog(Broker broker) {
+    private String getCatalog(Broker broker) {
         try {
             HttpClient client = HttpClientBuilder.create().build();
             HttpGet request = new HttpGet(url);
@@ -167,7 +180,7 @@ public class BrokerBean implements Serializable {
                     + response.getStatusLine().getStatusCode());
 
             BufferedReader rd = new BufferedReader(
-                    new InputStreamReader(response.getEntity().getContent()));
+                    new InputStreamReader(response.getEntity().getContent(), "UTF8"));
 
             StringBuffer result = new StringBuffer();
             String line = "";
@@ -180,12 +193,14 @@ public class BrokerBean implements Serializable {
 
             logger.info(result);
 
-            return response.getStatusLine().getStatusCode() == 200;
+            return result.toString();
+
+            //return response.getStatusLine().getStatusCode() == 200;
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return "";
     }
 }

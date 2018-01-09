@@ -1,5 +1,10 @@
 package com.swisscom.model;
 
+import com.swisscom.model.dto.PlanDto;
+import com.swisscom.model.dto.ServiceDto;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Service {
@@ -8,18 +13,44 @@ public class Service {
     private String serviceId;
     private String name;
     private String description;
-    private String[] tags;
-    private String[] requires;
+    private List<Tag> tags;
+    private List<Require> requires;
     private boolean bindable;
     private boolean plan_updateable;
-    private Plan[] plans;
+    private List<Plan> plans;
 
 
     public Service() {
 
     }
 
-    public Service(String broker, String serviceId, String name, String description, String[] tags, String[] requires, boolean bindable, boolean plan_updateable, Plan[] plans) {
+    public static Service makeServiceFromDto(ServiceDto dto) {
+        return makeService(dto.getBroker(), dto.getId(), dto.getName(), dto.getDescription(), dto.getTags(), dto.getRequires(), dto.isBindable(), dto.isPlan_updateable(), dto.getPlans());
+    }
+
+    public static Service makeService(String broker, String serviceId, String name, String description, String[] tags, String[] requires, boolean bindable, boolean plan_updateable, List<PlanDto> plans) {
+        List<Tag> tagList = new ArrayList<>();
+        if (tags != null) {
+            for (String tag : tags) {
+                tagList.add(new Tag(tag));
+            }
+        }
+        List<Require> requireList = new ArrayList<>();
+        if (requires != null) {
+            for (String require : requires) {
+                requireList.add(new Require(require));
+            }
+        }
+        List<Plan> planList = new ArrayList<>();
+        if (plans != null) {
+            for (PlanDto planDto : plans) {
+                planList.add(Plan.makePlanFromDto(planDto));
+            }
+        }
+        return new Service(broker, serviceId, name, description, tagList, requireList, bindable, plan_updateable, planList);
+    }
+
+    public Service(String broker, String serviceId, String name, String description, List<Tag> tags, List<Require> requires, boolean bindable, boolean plan_updateable, List<Plan> plans) {
         this.id = UUID.randomUUID().toString();
         this.broker = broker;
         this.serviceId = serviceId;
@@ -72,19 +103,19 @@ public class Service {
         this.description = description;
     }
 
-    public String[] getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(String[] tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 
-    public String[] getRequires() {
+    public List<Require> getRequires() {
         return requires;
     }
 
-    public void setRequires(String[] requires) {
+    public void setRequires(List<Require> requires) {
         this.requires = requires;
     }
 
@@ -104,11 +135,11 @@ public class Service {
         this.plan_updateable = plan_updateable;
     }
 
-    public Plan[] getPlans() {
+    public List<Plan> getPlans() {
         return plans;
     }
 
-    public void setPlans(Plan[] plans) {
+    public void setPlans(List<Plan> plans) {
         this.plans = plans;
     }
 }

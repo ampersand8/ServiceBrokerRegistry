@@ -1,5 +1,7 @@
 package com.swisscom.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Broker {
@@ -9,6 +11,7 @@ public class Broker {
     private String url;
     private String username;
     private String password;
+    private List<Service> services;
 
     public Broker() {
 
@@ -21,6 +24,7 @@ public class Broker {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.services = new ArrayList<>();
     }
 
     public String getOwner() {
@@ -69,5 +73,17 @@ public class Broker {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public void addService(Service service) {
+        this.services.add(service);
+    }
+
+    public void setServices(List<Service> services) {
+        this.services = services;
     }
 }

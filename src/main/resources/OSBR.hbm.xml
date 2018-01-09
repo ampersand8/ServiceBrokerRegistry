@@ -23,6 +23,75 @@
         <property name="url" type="string" column="url" not-null="true"/>
         <property name="username" type="string" column="username" not-null="true"/>
         <property name="password" type="string" column="password" not-null="true"/>
+        <list name="services" cascade="all">
+            <key column="broker"/>
+            <index column="idx"/>
+            <one-to-many class="com.swisscom.model.Service"/>
+        </list>
+    </class>
+
+    <class name="com.swisscom.model.Service" table="services">
+        <meta attribute="class-description">
+            This class contains the course details.
+        </meta>
+        <id name="id" type="string" column="id"/>
+        <property name="serviceId" type="string" column="serviceId"/>
+        <property name="broker" type="string" column="broker" not-null="true"/>
+        <property name="name" type="string" column="name" not-null="true"/>
+        <property name="description" type="string" column="description"/>
+        <list name="tags" cascade="all">
+            <key column="service"/>
+            <index column="idx"/>
+            <one-to-many class="com.swisscom.model.Tag"/>
+        </list>
+        <list name="requires" cascade="all">
+            <key column="service"/>
+            <index column="idx"/>
+            <one-to-many class="com.swisscom.model.Require"/>
+        </list>
+        <property name="bindable" type="yes_no" column="bindable"/>
+        <property name="plan_updateable" type="yes_no" column="plan_updateable"/>
+        <list name="plans" cascade="all">
+            <key column="service"/>
+            <index column="idx"/>
+            <one-to-many class="com.swisscom.model.Plan"/>
+        </list>
+    </class>
+
+    <class name="com.swisscom.model.Plan" table="plans">
+        <meta attribute="class-description">
+            This class contains the course details.
+        </meta>
+        <id name="id" type="string" column="id"/>
+        <property name="planId" type="string" column="planId"/>
+        <property name="name" type="string" column="name" not-null="true"/>
+        <property name="description" type="string" column="description"/>
+        <property name="free" type="yes_no" column="free"/>
+        <property name="bindable" type="yes_no" column="bindable"/>
+        <list name="tags" cascade="all">
+            <key column="parent_id"/>
+            <index column="idx"/>
+            <one-to-many class="com.swisscom.model.Tag"/>
+        </list>
+        <list name="requires" cascade="all">
+            <key column="parent_id"/>
+            <index column="idx"/>
+            <one-to-many class="com.swisscom.model.Require"/>
+        </list>
+    </class>
+
+    <class name="com.swisscom.model.Tag" table="tags">
+        <id name="id" unsaved-value="0">
+            <generator class="increment"/>
+        </id>
+        <property name="value"/>
+    </class>
+
+    <class name="com.swisscom.model.Require" table="requires">
+        <id name="id" unsaved-value="0">
+            <generator class="increment"/>
+        </id>
+        <property name="value"/>
     </class>
 
 </hibernate-mapping>
