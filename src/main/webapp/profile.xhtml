@@ -1,7 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="WEB-INF/template.xhtml">
     <ui:define name="content">
         <link href="resources/style/profile.css" rel="stylesheet" type="text/css"/>
@@ -14,14 +14,17 @@
                     <li>
                         <h:outputLabel value="Old Password"/>
                         <h:inputSecret id="oldPassword" value="#{userBean.oldPassword}" pt:placeholder="Old Password"
-                        onkeyup="checkActive()"/>
+                                       onkeyup="checkActive()"/>
                     </li>
                     <li>
                         <h:outputLabel value="New Password"/>
                         <h:inputSecret id="newPassword" value="#{userBean.newPassword}" pt:placeholder="New Password" onkeyup="checkActive()"/>
                     </li>
                     <li>
-                        <h:commandButton id="changePasswordBtn" styleClass="changePasswordBtn" value="Change Pasword" action="#{userBean.changePassword}"/>
+                        <h:commandButton id="changePasswordBtn" styleClass="changePasswordBtn" value="Change Pasword"
+                                         action="#{userBean.changePassword}">
+                            <f:ajax execute="@form" render="message"/>
+                        </h:commandButton>
                     </li>
                     <li>
                         <h:commandButton id="deleteAccountBtn" styleClass="deleteBtn" value="Delete Account" action="#{userBean.deleteAccount}"/>
@@ -29,17 +32,20 @@
                 </ul>
             </h:panelGroup>
         </h:form>
+        <h:panelGroup layout="block" id="message" styleClass="#{userBean.messageSuccess}" onclick="toggleMessage()">
+            <h:graphicImage name="images/chevrons-right.svg" id="messageActionImage" styleClass="closeMessage" />
+            <h:outputLabel value="#{userBean.message}"/>
+        </h:panelGroup>
         <script type="text/javascript">
-            console.log("executing javascript");
             let oldPassword = document.getElementById("profileForm:oldPassword");
             let newPassword = document.getElementById("profileForm:newPassword");
             let changePasswordBtn = document.getElementById("profileForm:changePasswordBtn");
             let deleteAccountBtn = document.getElementById("profileForm:deleteAccountBtn");
+            let messageHidden = false;
             deleteAccountBtn.disabled = true;
             changePasswordBtn.disabled = true;
-            console.log("still executing javascript");
+
             function checkActive() {
-                console.log("checkOldPassword() triggered");
                 if (oldPassword.value.length > 0) {
                     deleteAccountBtn.classList.add("active");
                     deleteAccountBtn.disabled = false;
@@ -58,7 +64,22 @@
                 }
             }
 
+            function toggleMessage() {
+                let messagePanel = document.getElementById("message");
+                let actionImage = document.getElementById("messageActionImage");
+                if (messageHidden) {
+                    actionImage.src = "resources/images/chevrons-right.svg";
+                    messagePanel.style.right = "0px";
+                    messagePanel.classList.remove("hide");
+                } else {
+                    actionImage.src = "resources/images/chevrons-left.svg";
+                    messagePanel.classList.add("hide");
+                    console.log(messagePanel.offsetWidth);
+                    messagePanel.style.right = "-"+ (messagePanel.offsetWidth - 20) + "px";
+                }
+                messageHidden = !messageHidden;
 
+            }
         </script>
     </ui:define>
 </ui:composition>

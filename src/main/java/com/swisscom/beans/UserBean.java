@@ -28,12 +28,15 @@ public class UserBean implements Serializable {
     private String newPassword;
     private String oldPassword;
     private boolean anonymous = true;
+
     private static final String STARTPAGESUCCESSFULLOGIN = "brokers?faces-redirect=true";
     private static final String PAGEFAILEDREGISTER = "/?failed=register";
     private static final String PAGEFAILEDLOGIN = "/?failed=login";
     private static final String STARTPAGESUCCESSFULLOGOUT = "/";
 
     private User currentUser;
+    private String message;
+    private String messageSuccess;
 
     public String getId() {
         return id;
@@ -73,6 +76,22 @@ public class UserBean implements Serializable {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageSuccess() {
+        return messageSuccess;
+    }
+
+    public void setMessageSuccess(String messageSuccess) {
+        this.messageSuccess = messageSuccess;
     }
 
     public boolean getAnonymous() {
@@ -138,7 +157,7 @@ public class UserBean implements Serializable {
         return !this.anonymous;
     }
 
-    public String changePassword() {
+    public void changePassword() {
         User oldUser = getUser(getId());
         if (oldUser != null && oldUser.getPassword().equals(oldPassword)) {
             Session session = HibernateUtil.getHibernateSession();
@@ -148,14 +167,17 @@ public class UserBean implements Serializable {
                 transaction = session.beginTransaction();
                 session.update(oldUser);
                 transaction.commit();
-                return "worked";
+                this.message = "Successfully changed password";
+                this.messageSuccess = "success";
             } catch (Exception e) {
+                this.message = "Something went wrong, password change failed!";
+                this.messageSuccess = "fail";
                 e.printStackTrace();
             }
         } else {
-            return "profile";
+            this.message = "Password incorrect";
+            this.messageSuccess = "fail";
         }
-        return "end";
     }
 
     public String deleteAccount() {
@@ -163,7 +185,7 @@ public class UserBean implements Serializable {
         if (currentUser == null || !currentUser.getId().equals(getId())) {
             currentUser = getUser(getId());
         }
-        if (currentUser != null && currentUser.getPassword().equals(oldPassword)) {
+        if (currentUser != null && currentUser.getPassword().equals(this.oldPassword)) {
             System.out.println("going to delete the user");
             Session session = HibernateUtil.getHibernateSession();
             Transaction transaction = null;
@@ -174,15 +196,20 @@ public class UserBean implements Serializable {
                 this.anonymous = true;
             } catch (PersistenceException e) {
                 if (transaction != null) transaction.rollback();
-                System.out.println("deleting accoutn failed");
+                this.message = "Something went wrong, account deletion failed!";
+                this.messageSuccess = "fail";
+                return null;
             }
-            return "home";
+            return "index.xhtml?faces-redirect=true";
+        } else {
+            this.message = "Password did not match";
+            this.messageSuccess = "fail";
+            return null;
         }
-        System.out.println("deleting user failed");
-        return "";
     }
 
     private User getUser(String id) {
+        System.out.println("getUser("+id+")");
         Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
         try {
@@ -195,9 +222,10 @@ public class UserBean implements Serializable {
             User user = q.getSingleResult();
             transaction.commit();
             this.currentUser = user;
-
+            System.out.println("Found user: "+user.getUsername());
             return user;
         } catch (NoResultException e) {
+            e.printStackTrace();
             return null;
         }
     }
