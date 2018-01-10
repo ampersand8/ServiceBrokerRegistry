@@ -5,10 +5,13 @@
 
     <link href="../resources/style/topnavigation.css" rel="stylesheet" type="text/css"/>
     <h:panelGroup layout="block" pt:class="topnavigation">
+        <h:link outcome="index">
+            <h:graphicImage name="images/openservicebrokericon_small.png" styleClass="homeIcon"/>
+        </h:link>
         <div id="menu" class="left">
             <ul class="menu">
                 <li id="brokersLink"><h:link outcome="brokers" value="Brokers"/></li>
-                <li id="servicesLink" ><h:link outcome="services" value="Services"/></li>
+                <li id="servicesLink"><h:link outcome="services" value="Services"/></li>
             </ul>
         </div>
         <div class="right">

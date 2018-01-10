@@ -126,3 +126,17 @@ button#profileButton {
 .dropdown:hover #profileButton {
     background-color: #f4f4f9;
 }
+
+img.homeIcon {
+    height: 3em;
+    margin-top: 0.25em;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    -webkit-transition: -webkit-transform 1s ease-in-out;
+    transition:         transform 1s ease-in-out;
+}
+
+img.homeIcon:hover {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
