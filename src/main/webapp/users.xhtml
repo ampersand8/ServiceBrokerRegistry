@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h:panelGroup layout="block">
+            <p>
+                <h:outputLabel styleClass="pageTitle">Users</h:outputLabel>
+            </p>
+            <h:dataTable value="#{userBean.usersList}" var="u">
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    <h:outputLabel value="#{u.username}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Admin</f:facet>
+                    <h:outputLabel value="Yes" rendered="#{u.admin}"/>
+                    <h:outputLabel value="No" rendered="!#{u.admin}"/>
+                </h:column>
+                <h:column>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                </h:column>
+            </h:dataTable>
+        </h:panelGroup>
+        <script type="text/javascript">
+            document.getElementById("usersLink").classList.add("active");
+        </script>
+    </ui:define>
+</ui:composition>

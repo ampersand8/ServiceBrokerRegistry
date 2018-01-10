@@ -6,6 +6,7 @@ public class User {
     private String id;
     private String username;
     private String password;
+    private boolean admin;
 
     public User() {
 
@@ -15,6 +16,7 @@ public class User {
         this.id = UUID.randomUUID().toString();
         this.username = username;
         this.password = password;
+        this.admin = false;
     }
 
     public String getUsername() {
@@ -39,5 +41,13 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }

@@ -11,6 +11,7 @@
         <id name="id" type="string" column="id"/>
         <property name="username" type="string" column="username" not-null="true" unique="true"/>
         <property name="password" type="string" column="password" not-null="true"/>
+        <property name="admin" type="org.hibernate.type.NumericBooleanType" column="admin"/>
     </class>
 
     <class name="com.swisscom.model.Broker" table="brokers">

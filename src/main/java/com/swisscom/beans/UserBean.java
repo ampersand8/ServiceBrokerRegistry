@@ -18,6 +18,7 @@ import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 
 @ManagedBean(name = "userBean")
 @SessionScoped
@@ -28,6 +29,7 @@ public class UserBean implements Serializable {
     private String newPassword;
     private String oldPassword;
     private boolean anonymous = true;
+    private List<User> usersList;
 
     private static final String STARTPAGESUCCESSFULLOGIN = "brokers?faces-redirect=true";
     private static final String PAGEFAILEDREGISTER = "/?failed=register";
@@ -208,8 +210,41 @@ public class UserBean implements Serializable {
         }
     }
 
+    public List<User> getUsersList() {
+        System.out.println("entered getUsersList()");
+        this.currentUser = getUser(getId());
+        System.out.println("Got user: " + this.currentUser.getUsername());
+        System.out.println("Is user admin? " + this.currentUser.isAdmin());
+        //if (this.currentUser != null && this.currentUser.isAdmin()) {
+        if (this.currentUser != null) {
+            System.out.println(this.currentUser.getUsername() + "is admin");
+            Session session = HibernateUtil.getHibernateSession();
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+                CriteriaBuilder builder = session.getCriteriaBuilder();
+                CriteriaQuery<User> query = builder.createQuery(User.class);
+                Root<User> root = query.from(User.class);
+                query.select(root);
+                Query<User> q = session.createQuery(query);
+                List<User> users = q.getResultList();
+                transaction.commit();
+                return users;
+            } catch (NoResultException e) {
+                System.out.println("Ouuuu nooooouuuuu!");
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public void setUsersList(List<User> usersList) {
+        this.usersList = usersList;
+    }
+
     private User getUser(String id) {
-        System.out.println("getUser("+id+")");
+        System.out.println("getUser(" + id + ")");
         Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
         try {
@@ -222,7 +257,7 @@ public class UserBean implements Serializable {
             User user = q.getSingleResult();
             transaction.commit();
             this.currentUser = user;
-            System.out.println("Found user: "+user.getUsername());
+            System.out.println("Found user: " + user.getUsername());
             return user;
         } catch (NoResultException e) {
             e.printStackTrace();

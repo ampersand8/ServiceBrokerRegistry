@@ -52,4 +52,5 @@ div#message.success {
 
 div#message.fail {
     background-color: #ff4349;
+    color: white;
 }
