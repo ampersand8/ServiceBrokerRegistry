@@ -1,0 +1,24 @@
+#profileForm\:deleteAccountBtn.active {
+    background-color: #ff4349;
+    color: white;
+}
+
+#profileForm\:changePasswordBtn.active {
+    background-color: #eee;
+    color: black;
+}
+
+#profileForm\:deleteAccountBtn, #profileForm\:changePasswordBtn {
+    background-color: #555555;
+    color: #ccc;
+}
+
+#profileForm\:deleteAccountBtn.active:hover {
+    background-color: red;
+}
+
+#profileForm\:changePasswordBtn.active:hover {
+    cursor: pointer;
+    background-color: #278eff;
+    color: white;
+}

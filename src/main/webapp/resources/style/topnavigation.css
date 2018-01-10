@@ -99,7 +99,7 @@ button#profileButton {
     right: 0;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 160px;
+    min-width: 130px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
@@ -125,6 +125,20 @@ button#profileButton {
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover #profileButton {
     background-color: #f4f4f9;
+}
+
+a.profileLink {
+    padding-left: 2.5em;
+    background-image: url("../images/settings.svg");
+    background-position: 8px 8px;
+    background-repeat: no-repeat;
+}
+
+a.logoutLink {
+    padding-left: 2.5em;
+    background-image: url("../images/log-out.svg");
+    background-position: 8px 8px;
+    background-repeat: no-repeat;
 }
 
 img.homeIcon {

@@ -22,7 +22,8 @@
                 <div class="dropdown">
                     <button class="dropbtn" id="profileButton">#{userBean.username}</button>
                     <div class="dropdown-content">
-                        <h:commandLink action="#{userBean.logout}" value="Logout"/>
+                        <h:link styleClass="profileLink" outcome="profile" value="Profile"/>
+                        <h:commandLink styleClass="logoutLink" action="#{userBean.logout}" value="Logout"/>
                     </div>
                 </div>
             </h:form>

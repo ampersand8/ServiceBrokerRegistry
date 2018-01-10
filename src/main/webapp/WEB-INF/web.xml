@@ -47,4 +47,10 @@
         <url-pattern>/brokers/register</url-pattern>
     </filter-mapping>
 
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/profile</url-pattern>
+    </filter-mapping>
+
+
 </web-app>

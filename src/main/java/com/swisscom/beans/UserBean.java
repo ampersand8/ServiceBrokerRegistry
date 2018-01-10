@@ -25,11 +25,15 @@ public class UserBean implements Serializable {
     private String id;
     private String username;
     private String password;
+    private String newPassword;
+    private String oldPassword;
     private boolean anonymous = true;
     private static final String STARTPAGESUCCESSFULLOGIN = "brokers?faces-redirect=true";
-    private static final String PAGEFAILEDREGISTER= "/?failed=register";
+    private static final String PAGEFAILEDREGISTER = "/?failed=register";
     private static final String PAGEFAILEDLOGIN = "/?failed=login";
     private static final String STARTPAGESUCCESSFULLOGOUT = "/";
+
+    private User currentUser;
 
     public String getId() {
         return id;
@@ -55,11 +59,28 @@ public class UserBean implements Serializable {
         this.password = password;
     }
 
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
     public boolean getAnonymous() {
         return this.anonymous;
     }
 
     public String add() {
+        System.out.println("entered add()");
         Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
         User user = new User(username, password);
@@ -71,8 +92,6 @@ public class UserBean implements Serializable {
         } catch (PersistenceException e) {
             if (transaction != null) transaction.rollback();
             return PAGEFAILEDREGISTER;
-        } finally {
-            // session.close();
         }
         this.id = user.getId();
         return STARTPAGESUCCESSFULLOGIN;
@@ -99,8 +118,6 @@ public class UserBean implements Serializable {
             }
         } catch (NoResultException e) {
             return PAGEFAILEDLOGIN;
-        } finally {
-            // session.close();
         }
     }
 
@@ -119,5 +136,69 @@ public class UserBean implements Serializable {
 
     public boolean isLoggedIn() {
         return !this.anonymous;
+    }
+
+    public String changePassword() {
+        User oldUser = getUser(getId());
+        if (oldUser != null && oldUser.getPassword().equals(oldPassword)) {
+            Session session = HibernateUtil.getHibernateSession();
+            Transaction transaction = null;
+            oldUser.setPassword(newPassword);
+            try {
+                transaction = session.beginTransaction();
+                session.update(oldUser);
+                transaction.commit();
+                return "worked";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            return "profile";
+        }
+        return "end";
+    }
+
+    public String deleteAccount() {
+        System.out.println("Entered deleteAccount()");
+        if (currentUser == null || !currentUser.getId().equals(getId())) {
+            currentUser = getUser(getId());
+        }
+        if (currentUser != null && currentUser.getPassword().equals(oldPassword)) {
+            System.out.println("going to delete the user");
+            Session session = HibernateUtil.getHibernateSession();
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+                session.remove(currentUser);
+                transaction.commit();
+                this.anonymous = true;
+            } catch (PersistenceException e) {
+                if (transaction != null) transaction.rollback();
+                System.out.println("deleting accoutn failed");
+            }
+            return "home";
+        }
+        System.out.println("deleting user failed");
+        return "";
+    }
+
+    private User getUser(String id) {
+        Session session = HibernateUtil.getHibernateSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<User> query = builder.createQuery(User.class);
+            Root<User> root = query.from(User.class);
+            query.select(root).where(builder.equal(root.get("id"), id));
+            Query<User> q = session.createQuery(query);
+            User user = q.getSingleResult();
+            transaction.commit();
+            this.currentUser = user;
+
+            return user;
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

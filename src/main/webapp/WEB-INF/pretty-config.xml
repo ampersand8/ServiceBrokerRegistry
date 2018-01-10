@@ -28,4 +28,9 @@
         <view-id value="/serviceDetails.xhtml" />
     </url-mapping>
 
+    <url-mapping id="profile">
+        <pattern value="/profile" />
+        <view-id value="/profile.xhtml" />
+    </url-mapping>
+
 </pretty-config>
