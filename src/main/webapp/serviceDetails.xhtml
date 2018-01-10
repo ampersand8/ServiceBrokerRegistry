@@ -4,19 +4,17 @@
     <ui:define name="content">
         <h:panelGroup layout="block">
             <p>
-                <h:outputLabel styleClass="pageTitle">Services</h:outputLabel>
+                <h:outputLabel styleClass="pageTitle">Plans</h:outputLabel>
             </p>
-            In this registry you should find all the services.
-            <h:dataTable value="#{serviceBean.list}" var="s">
+            In this registry you should find all the plans.
+            <h:dataTable value="#{planBean.list}" var="p">
                 <h:column>
                     <f:facet name="header">Name</f:facet>
-                    <h:link outcome="serviceDetails" value="#{s.name}">
-                        <f:param name="requestServiceId" value="#{s.id}"/>
-                    </h:link>
+                    #{p.name}
                 </h:column>
                 <h:column>
                     <f:facet name="header">Description</f:facet>
-                    <h:outputLabel value="#{s.description}"/>
+                    #{p.description}
                 </h:column>
             </h:dataTable>
         </h:panelGroup>

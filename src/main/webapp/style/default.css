@@ -116,7 +116,7 @@ table tr th {
 
 table {
     width: 100%;
-    padding: 2em;
+
     border-collapse: collapse;
     background-color: white;
 }
@@ -125,10 +125,20 @@ tr {
     border-bottom: 1px solid #ddd;
 }
 
-table tr td, th {
-    text-align: left;
-    padding: 1.5em 2em 1.5em 1em;
+table tr td, table tr th {
     color: #777;
+    text-align: left;
+}
+
+table tr th {
+    padding: 1.5em 2em 1.5em 1em;
+}
+
+table tr td a, table tr td label {
+    color: inherit;
+    display: block;
+    padding: 1.5em 2em 1.5em 1em;
+    text-decoration: none;
 }
 
 tr:hover td {

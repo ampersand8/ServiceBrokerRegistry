@@ -23,4 +23,9 @@
         <view-id value="/services.xhtml" />
     </url-mapping>
 
+    <url-mapping id="serviceDetails">
+        <pattern value="/services/#{requestServiceId}" />
+        <view-id value="/serviceDetails.xhtml" />
+    </url-mapping>
+
 </pretty-config>

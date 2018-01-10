@@ -13,11 +13,11 @@
             <h:dataTable value="#{brokerBean.list}" var="b">
                 <h:column>
                     <f:facet name="header">Name</f:facet>
-                    #{b.name}
+                    <h:outputLabel value="#{b.name}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">URL</f:facet>
-                    #{b.url}
+                    <h:outputLabel value="#{b.url}"/>
                 </h:column>
                 <h:column>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
