@@ -20,7 +20,7 @@ body {
 
 input {
     padding: 0.8em;
-    background-color: #eee !important;
+    background-color: #eee;
 }
 
 input[type="button"]:hover, input[type="submit"]:hover {

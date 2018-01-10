@@ -19,11 +19,12 @@
     <c:if test="#{userBean.anonymous eq false}">
         <h:panelGroup layout="block" styleClass="loginregister">
             <h:form>
-                <h:outputLabel value="#{userBean.username}"/>
-                <h:commandLink action="#{userBean.logout}">
-                    <h:graphicImage name="images/log-out.svg" action="#{userBean.logout}"/>
-                </h:commandLink>
-
+                <div class="dropdown">
+                    <button class="dropbtn" id="profileButton">#{userBean.username}</button>
+                    <div class="dropdown-content">
+                        <h:commandLink action="#{userBean.logout}" value="Logout"/>
+                    </div>
+                </div>
             </h:form>
         </h:panelGroup>
     </c:if>
