@@ -26,7 +26,6 @@ import java.io.Serializable;
 public class LoginSessionBean implements Serializable {
     private String id;
     private String username;
-    private String password;
     private boolean admin = false;
     private boolean anonymous = true;
 
@@ -44,14 +43,6 @@ public class LoginSessionBean implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public boolean isAdmin() {
