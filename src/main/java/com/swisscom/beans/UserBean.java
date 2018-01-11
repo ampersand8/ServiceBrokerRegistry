@@ -193,13 +193,34 @@ public class UserBean implements Serializable {
         }
     }
 
+    public void deleteUser(String id) {
+        if (isAdmin()) {
+            Session session = HibernateUtil.getHibernateSession();
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+                String hql = "delete User where id = :id";
+                Query q = session.createQuery(hql).setParameter("id", id);
+                q.executeUpdate();
+                transaction.commit();
+                this.message = "User successfully deleted";
+                this.messageSuccess = "success";
+            } catch (PersistenceException e) {
+                if (transaction != null) transaction.rollback();
+                this.message = "Something went wrong, user deletion failed!";
+                this.messageSuccess = "fail";
+            }
+        } else {
+            this.message = "Only admin can delete other users";
+            this.messageSuccess = "fail";
+        }
+    }
+
     public String deleteAccount() {
-        System.out.println("Entered deleteAccount()");
         if (currentUser == null || !currentUser.getId().equals(getId())) {
             currentUser = getUser(getId());
         }
         if (currentUser != null && currentUser.getPassword().equals(this.oldPassword)) {
-            System.out.println("going to delete the user");
             Session session = HibernateUtil.getHibernateSession();
             Transaction transaction = null;
             try {
@@ -222,13 +243,8 @@ public class UserBean implements Serializable {
     }
 
     public List<User> getUsersList() {
-        System.out.println("entered getUsersList()");
         User user = getUser(getId());
-        System.out.println("Got user: " + user.getUsername());
-        System.out.println("Is user admin? " + user.isAdmin());
-        //if (this.currentUser != null && this.currentUser.isAdmin()) {
-        if (user != null) {
-            System.out.println(user.getUsername() + "is admin");
+        if (user != null  && user.isAdmin()) {
             Session session = HibernateUtil.getHibernateSession();
             Transaction transaction = null;
             try {
@@ -242,7 +258,6 @@ public class UserBean implements Serializable {
                 transaction.commit();
                 return users;
             } catch (NoResultException e) {
-                System.out.println("Ouuuu nooooouuuuu!");
                 e.printStackTrace();
                 return null;
             }
@@ -255,7 +270,6 @@ public class UserBean implements Serializable {
     }
 
     private User getUser(String id) {
-        System.out.println("getUser(" + id + ")");
         Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
         try {
@@ -267,8 +281,6 @@ public class UserBean implements Serializable {
             Query<User> q = session.createQuery(query);
             User user = q.getSingleResult();
             transaction.commit();
-            System.out.println("Found user: " + user.getUsername());
-            System.out.println("Found user is admin? " + user.isAdmin());
             return user;
         } catch (NoResultException e) {
             e.printStackTrace();
