@@ -1,3 +1,7 @@
 tr.hide {
     display: none;
 }
+
+input#query {
+    width: 30em;
+}

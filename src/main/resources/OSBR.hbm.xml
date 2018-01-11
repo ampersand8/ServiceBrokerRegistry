@@ -37,7 +37,7 @@
         </meta>
         <id name="id" type="string" column="id"/>
         <property name="serviceId" type="string" column="serviceId"/>
-        <property name="broker" type="string" column="broker" not-null="true"/>
+        <many-to-one name="broker" class="com.swisscom.model.Broker" column="broker" cascade="all" not-null="true"/>
         <property name="name" type="string" column="name" not-null="true"/>
         <property name="description" type="string" column="description"/>
         <list name="tags" cascade="all">

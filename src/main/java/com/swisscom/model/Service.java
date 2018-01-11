@@ -6,10 +6,11 @@ import com.swisscom.model.dto.ServiceDto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Service {
     private String id;
-    private String broker;
+    private Broker broker;
     private String serviceId;
     private String name;
     private String description;
@@ -28,7 +29,7 @@ public class Service {
         return makeService(dto.getBroker(), dto.getId(), dto.getName(), dto.getDescription(), dto.getTags(), dto.getRequires(), dto.isBindable(), dto.isPlan_updateable(), dto.getPlans());
     }
 
-    public static Service makeService(String broker, String serviceId, String name, String description, String[] tags, String[] requires, boolean bindable, boolean plan_updateable, List<PlanDto> plans) {
+    public static Service makeService(Broker broker, String serviceId, String name, String description, String[] tags, String[] requires, boolean bindable, boolean plan_updateable, List<PlanDto> plans) {
         List<Tag> tagList = new ArrayList<>();
         if (tags != null) {
             for (String tag : tags) {
@@ -50,7 +51,7 @@ public class Service {
         return new Service(broker, serviceId, name, description, tagList, requireList, bindable, plan_updateable, planList);
     }
 
-    public Service(String broker, String serviceId, String name, String description, List<Tag> tags, List<Require> requires, boolean bindable, boolean plan_updateable, List<Plan> plans) {
+    public Service(Broker broker, String serviceId, String name, String description, List<Tag> tags, List<Require> requires, boolean bindable, boolean plan_updateable, List<Plan> plans) {
         this.id = UUID.randomUUID().toString();
         this.broker = broker;
         this.serviceId = serviceId;
@@ -71,11 +72,11 @@ public class Service {
         this.id = id;
     }
 
-    public String getBroker() {
+    public Broker getBroker() {
         return broker;
     }
 
-    public void setBroker(String broker) {
+    public void setBroker(Broker broker) {
         this.broker = broker;
     }
 
@@ -141,5 +142,13 @@ public class Service {
 
     public void setPlans(List<Plan> plans) {
         this.plans = plans;
+    }
+
+    public String getAllTags() {
+        return this.tags.stream().map(Tag::getValue).collect(Collectors.joining(","));
+    }
+
+    public String getAllRequires() {
+        return this.requires.stream().map(Require::getValue).collect(Collectors.joining(","));
     }
 }

@@ -97,7 +97,7 @@ public class BrokerBean implements Serializable {
             try {
                 transaction = session.beginTransaction();
                 for (Service service : services) {
-                    service.setBroker(broker.getId());
+                    service.setBroker(broker);
                     broker.addService(service);
                 }
                 session.save(broker);

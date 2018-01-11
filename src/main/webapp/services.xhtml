@@ -15,8 +15,20 @@
                     </h:link>
                 </h:column>
                 <h:column>
+                    <f:facet name="header">Broker</f:facet>
+                    <h:outputLabel value="#{s.broker.name}"/>
+                </h:column>
+                <h:column>
                     <f:facet name="header">Description</f:facet>
                     <h:outputLabel value="#{s.description}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Tags</f:facet>
+                    <h:outputLabel value="#{s.allTags}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Requires</f:facet>
+                    <h:outputLabel value="#{s.allRequires}"/>
                 </h:column>
             </h:dataTable>
         </h:panelGroup>

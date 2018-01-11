@@ -1,10 +1,12 @@
 package com.swisscom.model.dto;
 
+import com.swisscom.model.Broker;
+
 import java.util.List;
 
 public class ServiceDto {
     private String id;
-    private String broker;
+    private Broker broker;
     private String name;
     private String description;
     private String[] tags;
@@ -18,7 +20,7 @@ public class ServiceDto {
 
     }
 
-    public ServiceDto(String id, String broker, String name, String description, String[] tags, String[] requires, boolean bindable, boolean plan_updateable, List<PlanDto> plans) {
+    public ServiceDto(String id, Broker broker, String name, String description, String[] tags, String[] requires, boolean bindable, boolean plan_updateable, List<PlanDto> plans) {
         this.id = id;
         this.broker = broker;
         this.name = name;
@@ -38,11 +40,11 @@ public class ServiceDto {
         this.id = id;
     }
 
-    public String getBroker() {
+    public Broker getBroker() {
         return broker;
     }
 
-    public void setBroker(String broker) {
+    public void setBroker(Broker broker) {
         this.broker = broker;
     }
 
