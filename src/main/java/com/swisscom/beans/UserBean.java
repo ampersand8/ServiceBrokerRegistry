@@ -26,6 +26,7 @@ public class UserBean implements Serializable {
     private String id;
     private String username;
     private String password;
+    private boolean admin = false;
     private String newPassword;
     private String oldPassword;
     private boolean anonymous = true;
@@ -62,6 +63,14 @@ public class UserBean implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public String getOldPassword() {
@@ -110,6 +119,7 @@ public class UserBean implements Serializable {
             session.save(user);
             transaction.commit();
             this.anonymous = false;
+            this.admin = false;
         } catch (PersistenceException e) {
             if (transaction != null) transaction.rollback();
             return PAGEFAILEDREGISTER;
@@ -133,6 +143,7 @@ public class UserBean implements Serializable {
             if (password.equals(user.getPassword())) {
                 this.anonymous = false;
                 this.id = user.getId();
+                this.admin = user.isAdmin();
                 return STARTPAGESUCCESSFULLOGIN;
             } else {
                 return PAGEFAILEDLOGIN;
@@ -212,12 +223,12 @@ public class UserBean implements Serializable {
 
     public List<User> getUsersList() {
         System.out.println("entered getUsersList()");
-        this.currentUser = getUser(getId());
-        System.out.println("Got user: " + this.currentUser.getUsername());
-        System.out.println("Is user admin? " + this.currentUser.isAdmin());
+        User user = getUser(getId());
+        System.out.println("Got user: " + user.getUsername());
+        System.out.println("Is user admin? " + user.isAdmin());
         //if (this.currentUser != null && this.currentUser.isAdmin()) {
-        if (this.currentUser != null) {
-            System.out.println(this.currentUser.getUsername() + "is admin");
+        if (user != null) {
+            System.out.println(user.getUsername() + "is admin");
             Session session = HibernateUtil.getHibernateSession();
             Transaction transaction = null;
             try {
@@ -256,8 +267,8 @@ public class UserBean implements Serializable {
             Query<User> q = session.createQuery(query);
             User user = q.getSingleResult();
             transaction.commit();
-            this.currentUser = user;
             System.out.println("Found user: " + user.getUsername());
+            System.out.println("Found user is admin? " + user.isAdmin());
             return user;
         } catch (NoResultException e) {
             e.printStackTrace();

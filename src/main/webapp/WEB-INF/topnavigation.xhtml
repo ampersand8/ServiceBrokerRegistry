@@ -12,7 +12,7 @@
             <ul class="menu">
                 <li id="brokersLink"><h:link outcome="brokers" value="Brokers"/></li>
                 <li id="servicesLink"><h:link outcome="services" value="Services"/></li>
-                <li id="usersLink"><h:link outcome="users" value="Users"/></li>
+                <li id="usersLink"><h:link outcome="users" value="Users" rendered="#{userBean.admin}"/></li>
             </ul>
         </div>
         <div class="right">
