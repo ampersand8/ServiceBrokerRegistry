@@ -4,9 +4,11 @@ import com.swisscom.model.User;
 import com.swisscom.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -27,11 +29,6 @@ public class LoginSessionBean implements Serializable {
     private String password;
     private boolean admin = false;
     private boolean anonymous = true;
-
-    private static final String STARTPAGESUCCESSFULLOGIN = "brokers?faces-redirect=true";
-    private static final String PAGEFAILEDREGISTER = "index.xhml?failed=register";
-    private static final String PAGEFAILEDLOGIN = "index.xhtml?failed=login";
-    private static final String STARTPAGESUCCESSFULLOGOUT = "index.xhtml";
 
     public String getId() {
         return id;
@@ -61,70 +58,16 @@ public class LoginSessionBean implements Serializable {
         return admin;
     }
 
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
     public boolean getAnonymous() {
         return this.anonymous;
     }
 
     public void setAnonymous(boolean anonymous) {
         this.anonymous = anonymous;
-    }
-
-    public String add() {
-        Session session = HibernateUtil.getHibernateSession();
-        Transaction transaction = null;
-        User user = new User(username, password);
-        try {
-            transaction = session.beginTransaction();
-            session.save(user);
-            transaction.commit();
-            this.anonymous = false;
-            this.admin = false;
-        } catch (PersistenceException e) {
-            if (transaction != null) transaction.rollback();
-            return PAGEFAILEDREGISTER;
-        }
-        this.id = user.getId();
-        return STARTPAGESUCCESSFULLOGIN;
-    }
-
-    public String login() {
-        Session session = HibernateUtil.getHibernateSession();
-        Transaction transaction = null;
-        try {
-            session.setDefaultReadOnly(true);
-            transaction = session.beginTransaction();
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<User> query = builder.createQuery(User.class);
-            Root<User> root = query.from(User.class);
-            query.select(root).where(builder.equal(root.get("username"), username));
-            Query<User> q = session.createQuery(query);
-            User user = q.getSingleResult();
-            transaction.commit();
-            if (password.equals(user.getPassword())) {
-                this.anonymous = false;
-                this.id = user.getId();
-                this.admin = user.isAdmin();
-                return STARTPAGESUCCESSFULLOGIN;
-            } else {
-                return PAGEFAILEDLOGIN;
-            }
-        } catch (NoResultException e) {
-            if (transaction != null) transaction.rollback();
-            return PAGEFAILEDLOGIN;
-        }
-    }
-
-    public void logout() {
-        try {
-            this.anonymous = true;
-            FacesContext context = FacesContext.getCurrentInstance();
-            ExternalContext ec = context.getExternalContext();
-            ec.redirect(STARTPAGESUCCESSFULLOGOUT);
-            final HttpServletRequest request = (HttpServletRequest) ec.getRequest();
-            request.getSession(false).invalidate();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public boolean isLoggedIn() {

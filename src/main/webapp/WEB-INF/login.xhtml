@@ -6,13 +6,13 @@
         <h:panelGroup layout="block" styleClass="loginregister">
             <h:form>
                 <h:inputText id="name" required="true"
-                             value="#{loginSessionBean.username}" pt:placeholder="Username">
+                             value="#{loginBean.username}" pt:placeholder="Username">
                 </h:inputText>
                 <h:inputSecret id="password" required="true"
-                               value="#{loginSessionBean.password}" pt:placeholder="Password">
+                               value="#{loginBean.password}" pt:placeholder="Password">
                 </h:inputSecret>
-                <h:commandButton value="Login" action="#{loginSessionBean.login}" styleClass="action"/>
-                <h:commandButton value="Register" action="#{loginSessionBean.add}" styleClass="action"/>
+                <h:commandButton value="Login" action="#{loginBean.login}" styleClass="action"/>
+                <h:commandButton value="Register" action="#{loginBean.add}" styleClass="action"/>
             </h:form>
         </h:panelGroup>
     </c:if>
@@ -23,7 +23,7 @@
                     <button class="dropbtn" id="profileButton">#{loginSessionBean.username}</button>
                     <div class="dropdown-content">
                         <h:link styleClass="profileLink" outcome="profile" value="Profile"/>
-                        <h:commandLink styleClass="logoutLink" action="#{loginSessionBean.logout}" value="Logout"/>
+                        <h:commandLink styleClass="logoutLink" action="#{loginBean.logout}" value="Logout"/>
                     </div>
                 </div>
             </h:form>
