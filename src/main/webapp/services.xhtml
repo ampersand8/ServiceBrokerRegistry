@@ -2,12 +2,16 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="WEB-INF/template.xhtml">
     <ui:define name="content">
+        <link href="resources/style/services.css" rel="stylesheet" type="text/css"/>
         <h:panelGroup layout="block">
             <p>
                 <h:outputLabel styleClass="pageTitle">Services</h:outputLabel>
             </p>
             In this registry you should find all the services.
-            <h:dataTable value="#{serviceBean.list}" var="s">
+            <h:inputText id="query"/>
+            <input type="button" value="Search" onclick="filter()"/>
+            <input type="button" value="Clear" onclick="clearFilter()"/>
+            <h:dataTable id="servicesTable" value="#{serviceBean.list}" var="s">
                 <h:column>
                     <f:facet name="header">Name</f:facet>
                     <h:link outcome="serviceDetails" value="#{s.name}">
@@ -22,6 +26,38 @@
         </h:panelGroup>
         <script type="text/javascript">
             document.getElementById("servicesLink").classList.add("active");
+            let serviceTable = document.getElementById("servicesTable");
+            let queryInput = document.getElementById("query");
+
+            function filter() {
+                let query = queryInput.value;
+                for (let i = 0, row; row = serviceTable.rows[i]; i++) {
+                    let found = false;
+                    if (row.cells[0].tagName === "TH") {
+                        found = true;
+                        continue;
+                    }
+                    for (let j = 0, col; col = row.cells[j]; j++) {
+                        if (col.innerText.indexOf(query) > -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        row.classList.add("hide");
+                    } else {
+                        row.classList.remove("hide");
+                    }
+                }
+            }
+
+            function clearFilter() {
+                console.log("entered clear()");
+                queryInput.value = "";
+                for (let i = 0, row; row = serviceTable.rows[i]; i++) {
+                    row.classList.remove("hide");
+                }
+            }
         </script>
     </ui:define>
 </ui:composition>
