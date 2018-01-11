@@ -6,8 +6,9 @@
             <p>
                 <h:outputLabel styleClass="pageTitle">Users</h:outputLabel>
             </p>
+            <ui:include src="WEB-INF/searchTable.xhtml"/>
             <h:form>
-                <h:dataTable value="#{userBean.usersList}" var="u">
+                <h:dataTable id="searchTable" value="#{userBean.usersList}" var="u">
                     <h:column>
                         <f:facet name="header">Name</f:facet>
                         <h:outputLabel value="#{u.username}"/>

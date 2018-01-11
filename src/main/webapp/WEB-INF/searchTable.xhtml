@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html">
+    <link href="../resources/style/searchTable.css" rel="stylesheet" type="text/css"/>
+    <h:inputText id="query"/>
+    <input type="button" value="Search" onclick="filter()"/>
+    <input type="button" value="Clear" onclick="clearFilter()"/>
+    <script type="text/javascript">
+        let queryInput = document.getElementById("query");
+
+        function filter() {
+            let query = queryInput.value;
+            let searchTable = document.querySelector('[id$="searchTable"]');
+            for (let i = 0, row; row = searchTable.rows[i]; i++) {
+                let found = false;
+                if (row.cells[0].tagName === "TH") {
+                    found = true;
+                    continue;
+                }
+                for (let j = 0, col; col = row.cells[j]; j++) {
+                    if (col.innerText.indexOf(query) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    row.classList.add("hide");
+                } else {
+                    row.classList.remove("hide");
+                }
+            }
+        }
+
+        function clearFilter() {
+            queryInput.value = "";
+            for (let i = 0, row; row = searchTable.rows[i]; i++) {
+                row.classList.remove("hide");
+            }
+        }
+    </script>
+</ui:composition>

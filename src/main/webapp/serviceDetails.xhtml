@@ -6,8 +6,8 @@
             <p>
                 <h:outputLabel styleClass="pageTitle">Plans</h:outputLabel>
             </p>
-            In this registry you should find all the plans.
-            <h:dataTable value="#{serviceBean.planList}" var="p">
+            <ui:include src="WEB-INF/searchTable.xhtml"/>
+            <h:dataTable id="searchTable" value="#{serviceBean.planList}" var="p">
                 <h:column>
                     <f:facet name="header">Name</f:facet>
                     <h:outputLabel value="#{p.name}"/>
