@@ -68,6 +68,7 @@ public class ProfileBean implements Serializable {
                 transaction.commit();
                 messageBean.send("Successfully changed password", "success");
             } catch (Exception e) {
+                if (transaction != null) transaction.rollback();
                 messageBean.send("Something went wrong, password change failed!" , "fail");
                 e.printStackTrace();
             }

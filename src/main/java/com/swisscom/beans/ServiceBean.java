@@ -40,6 +40,7 @@ public class ServiceBean implements Serializable {
             transaction.commit();
             return services;
         } catch (NoResultException e) {
+            if (transaction != null) transaction.rollback();
             return new ArrayList<>();
         }
     }
@@ -85,6 +86,7 @@ public class ServiceBean implements Serializable {
 
             return service;
         } catch (NoResultException e) {
+            if (transaction != null) transaction.rollback();
             return null;
         }
     }

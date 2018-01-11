@@ -23,34 +23,3 @@
     color: white;
 }
 
-div#message {
-    position: fixed;
-    right: 0;
-    top: 10em;
-    padding: 1em 1em 1em 1.5em;
-    margin-left: -1em;
-    border-radius: 5px 0 0 5px;
-    max-width: 250px;
-    opacity: 0.5;
-}
-
-div#message:hover {
-    opacity: 1;
-    cursor: pointer;
-}
-
-div#message img.closeMessage {
-    position: absolute;
-    top: 50%;
-    margin-top: -12px;
-    left: -2px;
-}
-
-div#message.success {
-    background-color: #ADFF2F;
-}
-
-div#message.fail {
-    background-color: #ff4349;
-    color: white;
-}

@@ -29,9 +29,9 @@ public class LoginSessionBean implements Serializable {
     private boolean anonymous = true;
 
     private static final String STARTPAGESUCCESSFULLOGIN = "brokers?faces-redirect=true";
-    private static final String PAGEFAILEDREGISTER = "/?failed=register";
-    private static final String PAGEFAILEDLOGIN = "/?failed=login";
-    private static final String STARTPAGESUCCESSFULLOGOUT = "/";
+    private static final String PAGEFAILEDREGISTER = "index.xhml?failed=register";
+    private static final String PAGEFAILEDLOGIN = "index.xhtml?failed=login";
+    private static final String STARTPAGESUCCESSFULLOGOUT = "index.xhtml";
 
     public String getId() {
         return id;
@@ -91,6 +91,7 @@ public class LoginSessionBean implements Serializable {
         Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
         try {
+            session.setDefaultReadOnly(true);
             transaction = session.beginTransaction();
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<User> query = builder.createQuery(User.class);
@@ -108,6 +109,7 @@ public class LoginSessionBean implements Serializable {
                 return PAGEFAILEDLOGIN;
             }
         } catch (NoResultException e) {
+            if (transaction != null) transaction.rollback();
             return PAGEFAILEDLOGIN;
         }
     }
@@ -143,6 +145,7 @@ public class LoginSessionBean implements Serializable {
             transaction.commit();
             return user;
         } catch (NoResultException e) {
+            if (transaction != null) transaction.rollback();
             e.printStackTrace();
             return null;
         }

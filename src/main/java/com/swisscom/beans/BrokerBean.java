@@ -160,10 +160,6 @@ public class BrokerBean implements Serializable {
             request.addHeader("Authorization", "Basic " + encoding);
 
             HttpResponse response = client.execute(request);
-
-            logger.info("Response Code : "
-                    + response.getStatusLine().getStatusCode());
-
             BufferedReader rd = new BufferedReader(
                     new InputStreamReader(response.getEntity().getContent(), "UTF8"));
 
@@ -172,9 +168,6 @@ public class BrokerBean implements Serializable {
             while ((line = rd.readLine()) != null) {
                 result.append(line);
             }
-            System.out.println("testing: " + result);
-
-            logger.info(result);
 
             return result.toString();
 

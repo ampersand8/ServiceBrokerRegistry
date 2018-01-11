@@ -80,6 +80,7 @@ public class UserBean implements Serializable {
                 transaction.commit();
                 return users;
             } catch (NoResultException e) {
+                if (transaction != null) transaction.rollback();
                 e.printStackTrace();
                 return null;
             }
