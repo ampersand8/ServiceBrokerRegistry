@@ -2,8 +2,8 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <link href="../resources/style/message.css" rel="stylesheet" type="text/css"/>
-    <h:panelGroup layout="block" id="message" styleClass="#{messageBean.messageSuccess} nomessage" onclick="toggleMessage()">
-        <h:graphicImage name="images/chevrons-right.svg" id="messageActionImage" styleClass="closeMessage"/>
+    <h:panelGroup layout="block" id="message" styleClass="#{messageBean.messageSuccess}" onclick="toggleMessage()">
+        <h:graphicImage name="images/chevrons-right.svg" id="messageActionImage" styleClass="closeMessage #{messageBean.messageSuccess}"/>
         <h:outputLabel value="#{messageBean.message}"/>
     </h:panelGroup>
     <script type="text/javascript">
@@ -12,7 +12,6 @@
         function toggleMessage() {
             let messagePanel = document.getElementById("message");
             let actionImage = document.getElementById("messageActionImage");
-            messagePanel.classList.remove("nomessage");
             if (messageHidden) {
                 actionImage.src = "resources/images/chevrons-right.svg";
                 messagePanel.style.right = "0px";

@@ -19,6 +19,7 @@ div#message:hover {
 }
 
 div#message img.closeMessage {
+    display: none;
     position: absolute;
     top: 50%;
     margin-top: -12px;
@@ -32,4 +33,9 @@ div#message.success {
 div#message.fail {
     background-color: #ff4349;
     color: white;
+}
+
+div#message img.closeMessage.fail,
+div#message img.closeMessage.success {
+    display: block;
 }
