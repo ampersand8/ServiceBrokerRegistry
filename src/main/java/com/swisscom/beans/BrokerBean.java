@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -32,33 +32,27 @@ import java.util.Base64;
 import java.util.List;
 
 @ManagedBean(name = "brokerBean")
-@SessionScoped
+@RequestScoped
 public class BrokerBean implements Serializable {
 
     final static Logger logger = Logger.getLogger(BrokerBean.class);
-
-    private String id;
     private String name;
     private String url;
     private String username;
     private String password;
 
-    @ManagedProperty(value = "#{userBean}")
-    private UserBean userBean;
+    @ManagedProperty(value = "#{loginSessionBean}")
+    private LoginSessionBean loginSessionBean;
 
     private static final String PAGESUCCESSREGISTER = "brokers?faces-redirect=true&success=brokerRegister";
     private static final String PAGEFAILEDREGISTER = "brokers?failed=brokerRegister";
 
-    public UserBean getUserBean() {
-        return this.userBean;
+    public LoginSessionBean getLoginSessionBean() {
+        return loginSessionBean;
     }
 
-    public void setUserBean(UserBean userBean) {
-        this.userBean = userBean;
-    }
-
-    public String getId() {
-        return id;
+    public void setLoginSessionBean(LoginSessionBean loginSessionBean) {
+        this.loginSessionBean = loginSessionBean;
     }
 
     public String getName() {
@@ -97,17 +91,13 @@ public class BrokerBean implements Serializable {
     public String add() {
         Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
-        Broker broker = new Broker(userBean.getId(), name, url, username, password);
-        List<Service> services = testReadingJson(getCatalog(broker));
+        Broker broker = new Broker(loginSessionBean.getId(), name, url, username, password);
+        List<Service> services = parseJsonString(getCatalog(broker));
         if (!services.isEmpty()) {
-            //List<Service> services = getCatalog(broker);
-            //logger.info(services);
             try {
                 transaction = session.beginTransaction();
-
                 for (Service service : services) {
                     service.setBroker(broker.getId());
-                    session.save(service);
                     broker.addService(service);
                 }
                 session.save(broker);
@@ -142,12 +132,10 @@ public class BrokerBean implements Serializable {
             return brokers;
         } catch (NoResultException e) {
             return new ArrayList<>();
-        } finally {
-            // session.close();
         }
     }
 
-    private List<Service> testReadingJson(String jsonString) {
+    private List<Service> parseJsonString(String jsonString) {
         JSONObject obj = new JSONObject(jsonString);
         JSONArray jsonServices = obj.getJSONArray("services");
         Gson gson = new Gson();
@@ -161,9 +149,6 @@ public class BrokerBean implements Serializable {
             services.add(service);
         }
         return services;
-
-
-        // System.out.println(obj.getJSONArray("services"));
     }
 
     private String getCatalog(Broker broker) {
@@ -187,16 +172,11 @@ public class BrokerBean implements Serializable {
             while ((line = rd.readLine()) != null) {
                 result.append(line);
             }
-
-            // JSONObject obj = new JSONObject(result);
             System.out.println("testing: " + result);
 
             logger.info(result);
 
             return result.toString();
-
-            //return response.getStatusLine().getStatusCode() == 200;
-
 
         } catch (Exception e) {
             e.printStackTrace();

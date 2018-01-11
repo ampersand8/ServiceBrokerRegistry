@@ -2,28 +2,28 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:h="http://java.sun.com/jsf/html" xmlns:c="http://java.sun.com/jsp/jstl/core">
-    <c:if test="#{userBean.anonymous}">
+    <c:if test="#{loginSessionBean.anonymous}">
         <h:panelGroup layout="block" styleClass="loginregister">
             <h:form>
                 <h:inputText id="name" required="true"
-                             value="#{userBean.username}" pt:placeholder="Username">
+                             value="#{loginSessionBean.username}" pt:placeholder="Username">
                 </h:inputText>
                 <h:inputSecret id="password" required="true"
-                               value="#{userBean.password}" pt:placeholder="Password">
+                               value="#{loginSessionBean.password}" pt:placeholder="Password">
                 </h:inputSecret>
-                <h:commandButton value="Login" action="#{userBean.login}" styleClass="action"/>
-                <h:commandButton value="Register" action="#{userBean.add}" styleClass="action"/>
+                <h:commandButton value="Login" action="#{loginSessionBean.login}" styleClass="action"/>
+                <h:commandButton value="Register" action="#{loginSessionBean.add}" styleClass="action"/>
             </h:form>
         </h:panelGroup>
     </c:if>
-    <c:if test="#{userBean.anonymous eq false}">
+    <c:if test="#{!loginSessionBean.anonymous}">
         <h:panelGroup layout="block" styleClass="loginregister">
             <h:form>
                 <div class="dropdown">
-                    <button class="dropbtn" id="profileButton">#{userBean.username}</button>
+                    <button class="dropbtn" id="profileButton">#{loginSessionBean.username}</button>
                     <div class="dropdown-content">
                         <h:link styleClass="profileLink" outcome="profile" value="Profile"/>
-                        <h:commandLink styleClass="logoutLink" action="#{userBean.logout}" value="Logout"/>
+                        <h:commandLink styleClass="logoutLink" action="#{loginSessionBean.logout}" value="Logout"/>
                     </div>
                 </div>
             </h:form>

@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.NoResultException;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @ManagedBean(name = "serviceBean")
-@SessionScoped
+@RequestScoped
 public class ServiceBean implements Serializable {
     private Service currentService;
 

@@ -6,42 +6,37 @@
     <ui:define name="content">
         <link href="resources/style/profile.css" rel="stylesheet" type="text/css"/>
         <p>
-            <h:outputLabel styleClass="pageTitle">Profile #{userBean.username}</h:outputLabel>
+            <h:outputLabel styleClass="pageTitle">Profile #{loginSessionBean.username}</h:outputLabel>
         </p>
         <h:form id="profileForm">
             <h:panelGroup layout="block" styleClass="docForm container">
                 <ul class="flex-outer">
                     <li>
                         <h:outputLabel value="Old Password"/>
-                        <h:inputSecret id="oldPassword" value="#{userBean.oldPassword}" pt:placeholder="Old Password"
+                        <h:inputSecret id="oldPassword" value="#{profileBean.oldPassword}" pt:placeholder="Old Password"
                                        onkeyup="checkActive()"/>
                     </li>
                     <li>
                         <h:outputLabel value="New Password"/>
-                        <h:inputSecret id="newPassword" value="#{userBean.newPassword}" pt:placeholder="New Password" onkeyup="checkActive()"/>
+                        <h:inputSecret id="newPassword" value="#{profileBean.newPassword}" pt:placeholder="New Password" onkeyup="checkActive()"/>
                     </li>
                     <li>
                         <h:commandButton id="changePasswordBtn" styleClass="changePasswordBtn" value="Change Pasword"
-                                         action="#{userBean.changePassword}">
+                                         action="#{profileBean.changePassword}">
                             <f:ajax execute="@form" render="message"/>
                         </h:commandButton>
                     </li>
                     <li>
-                        <h:commandButton id="deleteAccountBtn" styleClass="deleteBtn" value="Delete Account" action="#{userBean.deleteAccount}"/>
+                        <h:commandButton id="deleteAccountBtn" styleClass="deleteBtn" value="Delete Account" action="#{profileBean.deleteAccount}"/>
                     </li>
                 </ul>
             </h:panelGroup>
         </h:form>
-        <h:panelGroup layout="block" id="message" styleClass="#{userBean.messageSuccess}" onclick="toggleMessage()">
-            <h:graphicImage name="images/chevrons-right.svg" id="messageActionImage" styleClass="closeMessage" />
-            <h:outputLabel value="#{userBean.message}"/>
-        </h:panelGroup>
         <script type="text/javascript">
             let oldPassword = document.getElementById("profileForm:oldPassword");
             let newPassword = document.getElementById("profileForm:newPassword");
             let changePasswordBtn = document.getElementById("profileForm:changePasswordBtn");
             let deleteAccountBtn = document.getElementById("profileForm:deleteAccountBtn");
-            let messageHidden = false;
             deleteAccountBtn.disabled = true;
             changePasswordBtn.disabled = true;
 
@@ -62,22 +57,6 @@
                     deleteAccountBtn.disabled = true;
                     changePasswordBtn.disabled = true;
                 }
-            }
-
-            function toggleMessage() {
-                let messagePanel = document.getElementById("message");
-                let actionImage = document.getElementById("messageActionImage");
-                if (messageHidden) {
-                    actionImage.src = "resources/images/chevrons-right.svg";
-                    messagePanel.style.right = "0px";
-                    messagePanel.classList.remove("hide");
-                } else {
-                    actionImage.src = "resources/images/chevrons-left.svg";
-                    messagePanel.classList.add("hide");
-                    console.log(messagePanel.offsetWidth);
-                    messagePanel.style.right = "-"+ (messagePanel.offsetWidth - 20) + "px";
-                }
-                messageHidden = !messageHidden;
             }
         </script>
     </ui:define>

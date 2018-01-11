@@ -1,24 +1,18 @@
 package com.swisscom.util;
 
-import java.io.IOException;
+import com.swisscom.beans.LoginSessionBean;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.swisscom.beans.UserBean;
+import java.io.IOException;
 
 public class LoginFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        UserBean userBean = (UserBean)((HttpServletRequest)request).getSession().getAttribute("userBean");
+        LoginSessionBean loginSessionBean = (LoginSessionBean) ((HttpServletRequest)request).getSession().getAttribute("loginSessionBean");
 
-        if (userBean == null || !userBean.isLoggedIn()) {
+        if (loginSessionBean == null || !loginSessionBean.isLoggedIn()) {
             String contextPath = ((HttpServletRequest)request).getContextPath();
             ((HttpServletResponse)response).sendRedirect(contextPath + "/index.xhtml");
         }
