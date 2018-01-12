@@ -42,7 +42,6 @@ public class BrokerBean implements Serializable {
     }
 
     public List<Broker> getList() {
-
         Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
 

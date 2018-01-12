@@ -45,11 +45,12 @@ public class FormBrokerBean implements Serializable {
     private String username;
     private String password;
     private String title = "Register Broker";
+    private String id;
 
     @ManagedProperty(value = "#{loginSessionBean}")
     private LoginSessionBean loginSessionBean;
 
-    @ManagedProperty(value="#{messageBean}")
+    @ManagedProperty(value = "#{messageBean}")
     private MessageBean messageBean;
 
     private static final String PAGESUCCESSREGISTER = "brokers?faces-redirect=true";
@@ -110,11 +111,59 @@ public class FormBrokerBean implements Serializable {
         this.title = title;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String add() {
+        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        if (params.get("requestBrokerId") == null) {
+            Session session = HibernateUtil.getHibernateSession();
+            Transaction transaction = null;
+            Broker broker = new Broker(loginSessionBean.getId(), name, url, username, password);
+            String catalog = getCatalog(broker);
+            if (catalog == null) return null;
+            List<Service> services = parseJsonString(catalog);
+            if (services == null) return null;
+            if (!services.isEmpty()) {
+                try {
+                    transaction = session.beginTransaction();
+                    for (Service service : services) {
+                        service.setBroker(broker);
+                        broker.addService(service);
+                    }
+                    session.saveOrUpdate(broker);
+                    transaction.commit();
+                } catch (PersistenceException e) {
+                    e.printStackTrace();
+                    if (transaction != null) transaction.rollback();
+                    messageBean.send("Could not save broker", "fail");
+                    return null;
+                }
+                return PAGESUCCESSREGISTER;
+            } else {
+                messageBean.send("Cannot save broker without any services", "fail");
+                return null;
+            }
+        } else {
+            return this.update();
+        }
+    }
+
+    public String update() {
+        Broker brokerToUpdate = getBroker(this.id);
+        brokerToUpdate.setName(this.name);
+        brokerToUpdate.setOwner(loginSessionBean.getId());
+        brokerToUpdate.setUrl(this.url);
+        brokerToUpdate.setUsername(this.username);
+        brokerToUpdate.setPassword(this.password);
         Session session = HibernateUtil.getHibernateSession();
         Transaction transaction = null;
-        Broker broker = new Broker(loginSessionBean.getId(), name, url, username, password);
-        String catalog = getCatalog(broker);
+        String catalog = getCatalog(brokerToUpdate);
         if (catalog == null) return null;
         List<Service> services = parseJsonString(catalog);
         if (services == null) return null;
@@ -122,15 +171,18 @@ public class FormBrokerBean implements Serializable {
             try {
                 transaction = session.beginTransaction();
                 for (Service service : services) {
-                    service.setBroker(broker);
-                    broker.addService(service);
+                    service.setBroker(brokerToUpdate);
+                    brokerToUpdate.addService(service);
                 }
-                session.save(broker);
+                session.update(brokerToUpdate);
                 transaction.commit();
             } catch (PersistenceException e) {
+                e.printStackTrace();
                 if (transaction != null) transaction.rollback();
-                messageBean.send("Could not save broker", "fail");
+                messageBean.send("Could not update broker", "fail");
                 return null;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return PAGESUCCESSREGISTER;
         } else {
@@ -150,12 +202,11 @@ public class FormBrokerBean implements Serializable {
 
                 ServiceDto serviceDto = gson.fromJson(jsonService.toString(), ServiceDto.class);
                 Service service = Service.makeServiceFromDto(serviceDto);
-                System.out.println(service.getName());
                 services.add(service);
             }
             return services;
         } catch (JSONException e) {
-            messageBean.send("Could not parse JSON<br/>"+e.getMessage(), "fail");
+            messageBean.send("Could not parse JSON<br/>" + e.getMessage(), "fail");
             return null;
         }
     }
@@ -186,8 +237,7 @@ public class FormBrokerBean implements Serializable {
         } catch (ClientProtocolException e) {
             messageBean.send("Could not reach host", "fail");
             return null;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             messageBean.send("Something went wrong. Registering Broker failed", "fail");
             return null;
         }
@@ -204,6 +254,7 @@ public class FormBrokerBean implements Serializable {
                 this.url = broker.getUrl();
                 this.username = broker.getUsername();
                 this.title += " " + broker.getName();
+                this.id = broker.getId();
             }
         }
     }
