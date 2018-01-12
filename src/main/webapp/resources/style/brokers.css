@@ -1,0 +1,37 @@
+tr:hover svg.ellipsis {
+    border: 1px solid #777;
+    color: #777;
+}
+
+tr svg.ellipsis:hover {
+    cursor: pointer;
+    border: 1px solid #0070e0;
+    color: inherit;
+}
+
+tr svg.ellipsis.active {
+    border: 1px solid #ccc;
+}
+
+svg.ellipsis {
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 5px 8px;
+}
+
+div.actionMenu {
+    position: absolute;
+    display: none;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.5em;
+}
+
+div.actionMenu label {
+    padding: 0;
+}
+
+div.actionMenu.active {
+    display: block;
+}
