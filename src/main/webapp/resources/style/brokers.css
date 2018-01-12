@@ -28,13 +28,13 @@ div.actionMenu {
     padding: 0;
 }
 
-div.actionMenu label {
+div.actionMenu label, div.actionMenu a {
     padding: 0.2em 0.5em;
     width: 100%;
     color: #777;
 }
 
-div.actionMenu label:hover {
+div.actionMenu label:hover, div.actionMenu a:hover {
     color: inherit;
     cursor: pointer;
 }

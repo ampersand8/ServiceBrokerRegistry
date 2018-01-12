@@ -5,31 +5,31 @@
                 template="WEB-INF/template.xhtml">
     <ui:define name="content">
         <f:metadata>
-            <f:event type="preRenderView" listener="#{registerBrokerBean.onload}"/>
+            <f:event type="preRenderView" listener="#{formBrokerBean.onload}"/>
         </f:metadata>
         <p>
-            <h:outputLabel styleClass="pageTitle">Register Broker</h:outputLabel>
+            <h:outputLabel styleClass="pageTitle">#{formBrokerBean.title}</h:outputLabel>
         </p>
         <h:form>
             <h:panelGroup layout="block" styleClass="docForm container">
                 <ul class="flex-outer">
                     <li>
                         <h:outputLabel value="Name"/>
-                        <h:inputText id="name" required="true" value="#{registerBrokerBean.name}" pt:placeholder="Name"/>
+                        <h:inputText id="name" required="true" value="#{formBrokerBean.name}" pt:placeholder="Name"/>
                     </li>
                     <li>
                         <h:outputLabel value="URL"/>
-                        <h:inputText id="url" required="true" value="#{registerBrokerBean.url}" pt:placeholder="URL"/>
+                        <h:inputText id="url" required="true" value="#{formBrokerBean.url}" pt:placeholder="URL"/>
                     </li>
                     <li>
                         <h:outputLabel value="Username"/>
-                        <h:inputText id="username" required="true" value="#{registerBrokerBean.username}" pt:placeholder="Username"/>
+                        <h:inputText id="username" required="true" value="#{formBrokerBean.username}" pt:placeholder="Username"/>
                     </li>
                     <li>
                         <h:outputLabel value="Password"/>
-                        <h:inputSecret id="password" required="true" value="#{registerBrokerBean.password}" pt:placeholder="Password"/>
+                        <h:inputSecret id="password" required="true" value="#{formBrokerBean.password}" pt:placeholder="Password"/>
                     </li>
-                    <h:commandButton value="Save" action="#{registerBrokerBean.add}"/>
+                    <h:commandButton value="Save" action="#{formBrokerBean.add}"/>
                     <h:button value="Cancel" outcome="brokers.xhtml"/>
                 </ul>
             </h:panelGroup>

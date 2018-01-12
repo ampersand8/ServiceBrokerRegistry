@@ -4,14 +4,17 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
-<ui:include src="topnavigation.xhtml"/>
-<ui:include src="message.xhtml"/>
+
 <h:head>
     <title>Open Service Broker Registry</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <h:outputStylesheet library="style" name="default.css"/>
+    <h:outputStylesheet library="style" name="topnavigation.css"/>
     <ui:insert name="head"/>
+    <ui:insert name="css"/>
 </h:head>
+<ui:include src="topnavigation.xhtml"/>
+<ui:include src="message.xhtml"/>
 <body>
 <ui:insert name="topnavigation"/>
 

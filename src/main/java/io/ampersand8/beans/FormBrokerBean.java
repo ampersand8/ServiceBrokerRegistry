@@ -35,15 +35,16 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
-@ManagedBean(name = "registerBrokerBean")
+@ManagedBean(name = "formBrokerBean")
 @RequestScoped
-public class RegisterBrokerBean implements Serializable {
+public class FormBrokerBean implements Serializable {
 
-    final static Logger logger = Logger.getLogger(RegisterBrokerBean.class);
+    final static Logger logger = Logger.getLogger(FormBrokerBean.class);
     private String name;
     private String url;
     private String username;
     private String password;
+    private String title = "Register Broker";
 
     @ManagedProperty(value = "#{loginSessionBean}")
     private LoginSessionBean loginSessionBean;
@@ -101,6 +102,13 @@ public class RegisterBrokerBean implements Serializable {
         this.password = password;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String add() {
         Session session = HibernateUtil.getHibernateSession();
@@ -189,11 +197,13 @@ public class RegisterBrokerBean implements Serializable {
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String requestBrokerId = params.get("requestBrokerId");
         if (requestBrokerId != null && requestBrokerId.length() > 0) {
+            this.title = "Edit Broker";
             Broker broker = getBroker(requestBrokerId);
             if (broker != null) {
                 this.name = broker.getName();
                 this.url = broker.getUrl();
                 this.username = broker.getUsername();
+                this.title += " " + broker.getName();
             }
         }
     }

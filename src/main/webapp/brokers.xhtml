@@ -1,8 +1,10 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="WEB-INF/template.xhtml">
+    <ui:define name="css">
+        <h:outputStylesheet name="brokers.css" library="style"/>
+    </ui:define>
     <ui:define name="content">
-        <link href="resources/style/brokers.css" rel="stylesheet" type="text/css"/>
         <h:panelGroup layout="block">
             <p>
                 <h:outputLabel styleClass="pageTitle">Brokers</h:outputLabel>
@@ -34,7 +36,7 @@
                         <circle cx="5" cy="12" r="1"></circle>
                     </svg>
                     <h:panelGroup layout="block" id="actionPanel" class="actionMenu">
-                        <h:outputLabel value="Edit" rendered="#{b.owner eq loginSessionBean.id}"/>
+                        <h:outputLink  value="brokers/edit/#{b.id}" rendered="#{b.owner eq loginSessionBean.id}">Edit</h:outputLink>
                         <h:outputLabel value="Delete" rendered="#{b.owner eq loginSessionBean.id}"/>
                         <h:outputLabel value="Update"/>
                         <h:outputLabel value="Show JSON"/>
