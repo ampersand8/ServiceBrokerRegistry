@@ -4,7 +4,7 @@
     <link href="../resources/style/message.css" rel="stylesheet" type="text/css"/>
     <h:panelGroup layout="block" id="message" styleClass="#{messageBean.messageSuccess}" onclick="toggleMessage()">
         <h:graphicImage name="images/chevrons-right.svg" id="messageActionImage" styleClass="closeMessage #{messageBean.messageSuccess}"/>
-        <h:outputLabel value="#{messageBean.message}"/>
+        <h:outputLabel value="#{messageBean.message}" escape="false"/>
     </h:panelGroup>
     <script type="text/javascript">
         let messageHidden = false;

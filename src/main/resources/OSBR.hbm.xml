@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="com.swisscom.model.User" table="users">
+    <class name="io.ampersand8.model.User" table="users">
         <meta attribute="class-description">
             This class contains the course details.
         </meta>
@@ -14,7 +14,7 @@
         <property name="admin" type="org.hibernate.type.NumericBooleanType" column="admin"/>
     </class>
 
-    <class name="com.swisscom.model.Broker" table="brokers">
+    <class name="io.ampersand8.model.Broker" table="brokers">
         <meta attribute="class-description">
             This class contains the course details.
         </meta>
@@ -27,39 +27,39 @@
         <list name="services" cascade="all">
             <key column="broker"/>
             <index column="idx"/>
-            <one-to-many class="com.swisscom.model.Service"/>
+            <one-to-many class="io.ampersand8.model.Service"/>
         </list>
     </class>
 
-    <class name="com.swisscom.model.Service" table="services">
+    <class name="io.ampersand8.model.Service" table="services">
         <meta attribute="class-description">
             This class contains the course details.
         </meta>
         <id name="id" type="string" column="id"/>
         <property name="serviceId" type="string" column="serviceId"/>
-        <many-to-one name="broker" class="com.swisscom.model.Broker" column="broker" cascade="all" not-null="true"/>
+        <many-to-one name="broker" class="io.ampersand8.model.Broker" column="broker" cascade="all" not-null="true"/>
         <property name="name" type="string" column="name" not-null="true"/>
         <property name="description" type="string" column="description"/>
         <list name="tags" cascade="all">
             <key column="service"/>
             <index column="idx"/>
-            <one-to-many class="com.swisscom.model.Tag"/>
+            <one-to-many class="io.ampersand8.model.Tag"/>
         </list>
         <list name="requires" cascade="all">
             <key column="service"/>
             <index column="idx"/>
-            <one-to-many class="com.swisscom.model.Require"/>
+            <one-to-many class="io.ampersand8.model.Require"/>
         </list>
         <property name="bindable" type="yes_no" column="bindable"/>
         <property name="plan_updateable" type="yes_no" column="plan_updateable"/>
         <list name="plans" cascade="all">
             <key column="service"/>
             <index column="idx"/>
-            <one-to-many class="com.swisscom.model.Plan"/>
+            <one-to-many class="io.ampersand8.model.Plan"/>
         </list>
     </class>
 
-    <class name="com.swisscom.model.Plan" table="plans">
+    <class name="io.ampersand8.model.Plan" table="plans">
         <meta attribute="class-description">
             This class contains the course details.
         </meta>
@@ -72,23 +72,23 @@
         <list name="tags" cascade="all">
             <key column="parent_id"/>
             <index column="idx"/>
-            <one-to-many class="com.swisscom.model.Tag"/>
+            <one-to-many class="io.ampersand8.model.Tag"/>
         </list>
         <list name="requires" cascade="all">
             <key column="parent_id"/>
             <index column="idx"/>
-            <one-to-many class="com.swisscom.model.Require"/>
+            <one-to-many class="io.ampersand8.model.Require"/>
         </list>
     </class>
 
-    <class name="com.swisscom.model.Tag" table="tags">
+    <class name="io.ampersand8.model.Tag" table="tags">
         <id name="id" unsaved-value="0">
             <generator class="increment"/>
         </id>
         <property name="value"/>
     </class>
 
-    <class name="com.swisscom.model.Require" table="requires">
+    <class name="io.ampersand8.model.Require" table="requires">
         <id name="id" unsaved-value="0">
             <generator class="increment"/>
         </id>

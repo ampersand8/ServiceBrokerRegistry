@@ -39,7 +39,7 @@
 
     <filter>
         <filter-name>LoginFilter</filter-name>
-        <filter-class>com.swisscom.util.LoginFilter</filter-class>
+        <filter-class>io.ampersand8.util.LoginFilter</filter-class>
     </filter>
     <!-- Set the login filter to secure all the pages in the /secured/* path of the application  -->
     <filter-mapping>
