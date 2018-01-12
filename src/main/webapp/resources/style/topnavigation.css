@@ -49,11 +49,6 @@ ul.menu li:hover {
     background-color: #f4f4f9 !important;
 }
 
-ul.menu li.active {
-    /* background-color: #4CAF50; */
-    /* border-bottom: 2px solid #278eff; */
-}
-
 ul.menu li.active a {
     color: #278eff;
 }
@@ -72,7 +67,7 @@ div.loginregister .action:hover {
 }
 
 button#profileButton {
-    background-image: url("../images/user.svg");
+    background-image: url("#{resource['images/user.svg']}");
     background-position: 8px 12px;
     background-repeat: no-repeat;
     background-color: transparent;
@@ -129,14 +124,14 @@ button#profileButton {
 
 a.profileLink {
     padding-left: 2.5em;
-    background-image: url("../images/settings.svg");
+    background-image: url("#{resource['images/settings.svg']}");
     background-position: 8px 8px;
     background-repeat: no-repeat;
 }
 
 a.logoutLink {
     padding-left: 2.5em;
-    background-image: url("../images/log-out.svg");
+    background-image: url("#{resource['images/log-out.svg']}");
     background-position: 8px 8px;
     background-repeat: no-repeat;
 }

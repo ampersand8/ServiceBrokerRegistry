@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -32,6 +33,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 @ManagedBean(name = "registerBrokerBean")
 @RequestScoped
@@ -179,6 +181,38 @@ public class RegisterBrokerBean implements Serializable {
         }
         catch (Exception e) {
             messageBean.send("Something went wrong. Registering Broker failed", "fail");
+            return null;
+        }
+    }
+
+    public void onload() {
+        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String requestBrokerId = params.get("requestBrokerId");
+        if (requestBrokerId != null && requestBrokerId.length() > 0) {
+            Broker broker = getBroker(requestBrokerId);
+            if (broker != null) {
+                this.name = broker.getName();
+                this.url = broker.getUrl();
+                this.username = broker.getUsername();
+            }
+        }
+    }
+
+    private Broker getBroker(String id) {
+        Session session = HibernateUtil.getHibernateSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Broker> query = builder.createQuery(Broker.class);
+            Root<Broker> root = query.from(Broker.class);
+            query.select(root).where(builder.equal(root.get("id"), id));
+            Query<Broker> q = session.createQuery(query);
+            Broker broker = q.getSingleResult();
+            transaction.commit();
+            return broker;
+        } catch (NoResultException e) {
+            if (transaction != null) transaction.rollback();
             return null;
         }
     }

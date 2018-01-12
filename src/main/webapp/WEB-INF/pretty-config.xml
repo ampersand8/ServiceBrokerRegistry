@@ -18,6 +18,11 @@
         <view-id value="/registerBroker.xhtml" />
     </url-mapping>
 
+    <url-mapping id="editBroker">
+        <pattern value="/brokers/edit/#{requestBrokerId}" />
+        <view-id value="/registerBroker.xhtml" />
+    </url-mapping>
+
     <url-mapping id="services">
         <pattern value="/services" />
         <view-id value="/services.xhtml" />
