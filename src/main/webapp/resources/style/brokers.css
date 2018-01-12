@@ -25,11 +25,18 @@ div.actionMenu {
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 4px;
-    padding: 0.5em;
+    padding: 0;
 }
 
 div.actionMenu label {
-    padding: 0;
+    padding: 0.2em 0.5em;
+    width: 100%;
+    color: #777;
+}
+
+div.actionMenu label:hover {
+    color: inherit;
+    cursor: pointer;
 }
 
 div.actionMenu.active {

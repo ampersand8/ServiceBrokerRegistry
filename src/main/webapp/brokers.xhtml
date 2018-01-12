@@ -26,7 +26,8 @@
                     <h:outputLabel value="No" rendered="#{b.owner ne loginSessionBean.id}"/>
                 </h:column>
                 <h:column>
-                    <svg onclick="toggleActionMenu(this);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    <svg onclick="toggleActionMenu(this);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor"
                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal ellipsis">
                         <circle cx="12" cy="12" r="1"></circle>
                         <circle cx="19" cy="12" r="1"></circle>
@@ -46,14 +47,21 @@
 
             var activeContextMenu;
 
-            document.addEventListener("click", function(evt){
+            document.addEventListener("click", function (evt) {
                 if (!evt.target.classList.contains("ellipsis")) {
-                    activeContextMenu.classList.remove("active");
-                    activeContextMenu.parentNode.querySelector(".actionMenu").classList.remove("active");
+                    disableActiveContextMenu();
                 }
             });
 
+            function disableActiveContextMenu() {
+                if (activeContextMenu) {
+                    activeContextMenu.classList.remove("active");
+                    activeContextMenu.parentNode.querySelector(".actionMenu").classList.remove("active");
+                }
+            }
+
             function toggleActionMenu(toggleBtn) {
+                disableActiveContextMenu();
                 activeContextMenu = toggleBtn;
                 let actionPanel = activeContextMenu.parentNode.querySelector(".actionMenu");
                 if (actionPanel.classList.contains("active")) {
