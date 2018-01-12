@@ -12,21 +12,21 @@
                 <ul class="flex-outer">
                     <li>
                         <h:outputLabel value="Name"/>
-                        <h:inputText id="name" required="true" value="#{brokerBean.name}" pt:placeholder="Name"/>
+                        <h:inputText id="name" required="true" value="#{registerBrokerBean.name}" pt:placeholder="Name"/>
                     </li>
                     <li>
                         <h:outputLabel value="URL"/>
-                        <h:inputText id="url" required="true" value="#{brokerBean.url}" pt:placeholder="URL"/>
+                        <h:inputText id="url" required="true" value="#{registerBrokerBean.url}" pt:placeholder="URL"/>
                     </li>
                     <li>
                         <h:outputLabel value="Username"/>
-                        <h:inputText id="username" required="true" value="#{brokerBean.username}" pt:placeholder="Username"/>
+                        <h:inputText id="username" required="true" value="#{registerBrokerBean.username}" pt:placeholder="Username"/>
                     </li>
                     <li>
                         <h:outputLabel value="Password"/>
-                        <h:inputSecret id="password" required="true" value="#{brokerBean.password}" pt:placeholder="Password"/>
+                        <h:inputSecret id="password" required="true" value="#{registerBrokerBean.password}" pt:placeholder="Password"/>
                     </li>
-                    <h:commandButton value="Save" action="#{brokerBean.add}"/>
+                    <h:commandButton value="Save" action="#{registerBrokerBean.add}"/>
                     <h:button value="Cancel" outcome="brokers.xhtml"/>
                 </ul>
             </h:panelGroup>
